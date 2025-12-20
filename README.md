@@ -1,6 +1,6 @@
-# Hello, I'm Brennan
+# Hello, I'm Brennan!
 <a href="https://www.linkedin.com/in/brennan-vigna-783863263/"><img src ="https://img.shields.io/badge/LinkedIn-0072b1?&style=for-the-badge&logo=linkedin&logoColor=white" /><a>
-Brennan Vigna — Cybersecurity | Blue Team | SOC Analyst
+Cybersecurity | Blue Team | SOC Analyst
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Welcome to my cybersecurity portfolio and homelab documentation.

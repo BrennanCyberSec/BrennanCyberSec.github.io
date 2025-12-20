@@ -16,7 +16,7 @@ To show what I actually did, I will have documentation, screenshots, critical th
 ### Projects
 | Module | Topic | What You’ll See |
 |---|---|---|
-| **1** | [Windows Hardening](./1%20-%20Windows%20Hardening/) | Baselines, local policy, services review, logging improvements |
+| **1** | [Hayabusa Log Analysis](./https://github.com/BrennanCyberSec/BrennanCyberSec.github.io/) | Update rules, sysmon logs, generate timeline, triage |
 | **2** | [Network & Firewall (pfSense)](./2%20-%20Network%20%26%20Firewall%20(pfSense)/) | VLANs, rules, NAT, segmentation, test cases |
 | **3** | [Active Directory Lab](./3%20-%20Active%20Directory%20Lab/) | Users/groups/OUs, GPOs, DNS/DHCP notes, attack surface |
 | **4** | [SIEM (Splunk) Detections](./4%20-%20SIEM%20(Splunk)%20Detections/) | Ingest, dashboards, alerts, detection logic, tuning |

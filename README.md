@@ -6,13 +6,14 @@
 Welcome to my cybersecurity portfolio and homelab documentation.
 Here you’ll find me doing mostly Blue Team hands-on labs and writeups focused on SOC/Blue Team fundamentals: Active Directory, pfSense, Splunk, PCAP analysis, Linux hardening, and automation.
 My goal is to show not only what I did, but how I think when completing tasks and why I did a specific action. 
+
 To show what I actually did, I will have documentation, screenshots, critical thinking thought bubbles, and the satisfaction of learning new things along the way! Also, just a quick shoutout for all of the free learning material and teachers in this space. You all are truly appreciated in this journey and I will always be grateful for the accessible information to help me learn!
 
-# Brennan Vigna — Cybersecurity Portfolio
+# Cybersecurity Portfolio
 
 > Hands-on labs and writeups focused on SOC/Blue Team fundamentals: Active Directory, pfSense, Splunk, PCAP analysis, Linux hardening, and automation.
 
-### Projects (click into modules)
+### Projects
 | Module | Topic | What You’ll See |
 |---|---|---|
 | **1** | [Windows Hardening](./1%20-%20Windows%20Hardening/) | Baselines, local policy, services review, logging improvements |

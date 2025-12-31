@@ -1,10 +1,11 @@
 ---
 title: "Lab 01 — Hayabusa + Sysmon"
 ---
+<div class="nav">
 
 [Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
 
----
+</div>
 
 # Lab 01 — Hayabusa + Sysmon: Suspicious Activity Hunt
 

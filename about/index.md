@@ -17,7 +17,7 @@ Welcome! I'm Brennan, a cybersecurity student focused on purple team / SOC work.
 
 ## What I'm learning right now
 - Log analysis (Sysmon / Windows Event Logs)
-- Detection engineering basics (Sigma rules, triage workflow)
+- Detection engineering (Sigma rules, triage workflow)
 - Linux + Bash + Python for security automation
 - SIEM fundamentals (Splunk / Elastic-style workflows)
 

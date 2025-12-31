@@ -3,13 +3,62 @@
 
 @import "{{ site.theme }}";
 
+/* ===== Color palette ===== */
+:root {
+  --primary-blue: #2563eb;   /* calm blue */
+  --accent-purple: #7c3aed;  /* restrained purple */
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --bg-soft: #0f172a;
+}
+
+/* ===== Global text ===== */
+body {
+  color: var(--text-main);
+}
+
+/* ===== Headings ===== */
+h1, h2, h3 {
+  color: var(--primary-blue);
+  margin-top: 2.5rem;
+}
+
+h3 {
+  color: var(--accent-purple);
+}
+
+/* ===== Navigation bar ===== */
+.nav {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.nav a {
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--accent-purple);
+}
+
+/* ===== Code blocks ===== */
 pre {
-  border-radius: 10px;
+  background-color: var(--bg-soft);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
   padding: 16px;
-  overflow-x: auto;
+  margin: 1.5rem 0;
 }
 
 code {
+  color: #c7d2fe;
+}
+
+/* ===== Images ===== */
+img {
+  max-width: 100%;
   border-radius: 6px;
-  padding: 2px 6px;
+  margin: 1.5rem 0;
 }

@@ -2,10 +2,11 @@
 title: Installation Guide
 ---
 
+<div class="nav">
+
 [Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
 
----
-
+</div>
 
 # Kali Purple Installation Guide
 

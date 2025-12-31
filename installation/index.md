@@ -10,7 +10,8 @@ title: Installation Guide
 - Plenty of disk space
 
 ## Step 1: Import Kali Purple Iso to VMware VM
-```bash
+```bash sudo apt update && sudo apt full-upgrade -y```
+
 # I needed to first extract the VMware image:
 
 ## Step 2: 

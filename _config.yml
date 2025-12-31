@@ -1,24 +1,4 @@
-title: Brennan’s Cyber Lab Notes
-description: SOC homelab + detection engineering + blue team projects
-theme: null
-remote_theme: "mmistakes/minimal-mistakes@4.26.2"
-
-plugins:
-  - jekyll-include-cache
-  - jekyll-feed
-  - jekyll-sitemap
-
-minimal_mistakes_skin: "dark"   # or "default"
-search: true
-
-defaults:
-  - scope:
-      path: ""
-      type: posts
-    values:
-      layout: single
-      author_profile: false
-      read_time: true
-      comments: false
-      toc: true
-      toc_sticky: true
+title: Brennan’s Cyber Lab 
+description: SOC homelab + Purple Team Testing Environment
+theme: jekyll-theme-minimal
+markdown: kramdown

@@ -1,9 +1,7 @@
 ---
 title: Home
 ---
-
 [Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
-
 ---
 
 # Welcome to My Cybersecurity Lab

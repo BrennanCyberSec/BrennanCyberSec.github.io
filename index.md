@@ -2,6 +2,10 @@
 title: Home
 ---
 
+[Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
+
+---
+
 # Welcome to My Cybersecurity Lab
 
 This site documents my journey building a purple teaming architecture inspired by Kali Purple, called 'SOC in a box'. Plus labs for monioring, threat hunting, and vulnerability management.

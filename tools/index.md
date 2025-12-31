@@ -2,6 +2,10 @@
 title: Tools Reference
 ---
 
+[Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
+
+---
+
 # Tools Reference
 ...
 

@@ -2,6 +2,10 @@
 title: "Lab 01 — Hayabusa + Sysmon"
 ---
 
+[Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
+
+---
+
 # Lab 01 — Hayabusa + Sysmon: Suspicious Activity Hunt
 
 ## Goal

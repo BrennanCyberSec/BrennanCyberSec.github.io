@@ -2,9 +2,11 @@
 title: Labs
 ---
 
+<div class="nav">
+
 [Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
 
----
+</div>
 
 # Labs
 

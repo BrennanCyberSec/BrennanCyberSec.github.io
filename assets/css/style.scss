@@ -1,0 +1,15 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+pre {
+  border-radius: 10px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+code {
+  border-radius: 6px;
+  padding: 2px 6px;
+}

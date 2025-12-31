@@ -1,8 +1,11 @@
 ---
 title: Home
 ---
+<div class="nav">
+
 [Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
----
+
+</div>
 
 # Welcome to My Cybersecurity Lab
 

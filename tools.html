@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools | Brennan's Cybersecurity Lab</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                Brennan's Cybersecurity Lab
+            </a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="labs.html">Labs</a>
+                <a href="installation.html">Installation</a>
+                <a href="tools.html" class="active">Tools</a>
+                <a href="about.html">About</a>
+            </nav>
+            <a href="https://github.com/BrennanCyberSec" class="github-link" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                View on GitHub
+            </a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>🛠️ Security Tools</h1>
+        <p>Essential tools and frameworks used in our lab environment</p>
+    </div>
+
+    <div class="container">
+        <div class="content-wide">
+            <section>
+                <h2>Infrastructure & Automation</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🏛️</div>
+                            <h3>Ludus</h3>
+                        </div>
+                        <p>Self-hosted cyber range platform for building automated, multi-user lab environments with complex networks on Proxmox.</p>
+                        <a href="https://ludus.cloud" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📦</div>
+                            <h3>Proxmox VE</h3>
+                        </div>
+                        <p>Open-source server virtualization platform that powers our lab infrastructure with KVM virtualization and container support.</p>
+                        <a href="https://www.proxmox.com" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔧</div>
+                            <h3>Ansible</h3>
+                        </div>
+                        <p>Infrastructure automation tool for configuration management, application deployment, and orchestrating complex lab setups.</p>
+                        <a href="https://www.ansible.com" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Detection & Response</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔍</div>
+                            <h3>Elastic Security</h3>
+                        </div>
+                        <p>Unified SIEM and endpoint security platform for threat detection, investigation, and response with powerful analytics.</p>
+                        <a href="https://www.elastic.co/security" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🦅</div>
+                            <h3>Velociraptor</h3>
+                        </div>
+                        <p>Advanced digital forensics and incident response tool for endpoint visibility, threat hunting, and artifact collection.</p>
+                        <a href="https://docs.velociraptor.app" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐝</div>
+                            <h3>TheHive</h3>
+                        </div>
+                        <p>Open-source security incident response platform designed for SOCs, CSIRTs, and security teams for case management.</p>
+                        <a href="https://thehive-project.org" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🌊</div>
+                            <h3>Suricata</h3>
+                        </div>
+                        <p>High-performance network IDS, IPS, and security monitoring engine with multi-threaded detection capabilities.</p>
+                        <a href="https://suricata.io" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">📊</div>
+                            <h3>Wazuh</h3>
+                        </div>
+                        <p>Open-source security platform providing unified XDR and SIEM protection for workloads across cloud and on-premises.</p>
+                        <a href="https://wazuh.com" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🦈</div>
+                            <h3>Wireshark</h3>
+                        </div>
+                        <p>World's leading network protocol analyzer for deep packet inspection and traffic analysis.</p>
+                        <a href="https://www.wireshark.org" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Offensive Security</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐉</div>
+                            <h3>Kali Purple</h3>
+                        </div>
+                        <p>Defensive security distribution combining offensive tools with defensive SOC capabilities for purple teaming.</p>
+                        <a href="https://www.kali.org/blog/kali-linux-2023-1-release/" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🎯</div>
+                            <h3>Metasploit</h3>
+                        </div>
+                        <p>Penetration testing framework with extensive exploit database, payload generation, and post-exploitation capabilities.</p>
+                        <a href="https://www.metasploit.com" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🗡️</div>
+                            <h3>Sliver</h3>
+                        </div>
+                        <p>Open-source cross-platform adversary simulation and red team framework with modern C2 capabilities.</p>
+                        <a href="https://github.com/BishopFox/sliver" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔐</div>
+                            <h3>Covenant</h3>
+                        </div>
+                        <p>.NET command and control framework emphasizing security operations and red team engagements.</p>
+                        <a href="https://github.com/cobbr/Covenant" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🎣</div>
+                            <h3>GoPhish</h3>
+                        </div>
+                        <p>Open-source phishing framework for security awareness training and testing email security controls.</p>
+                        <a href="https://getgophish.com" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">⚔️</div>
+                            <h3>Bloodhound</h3>
+                        </div>
+                        <p>Active Directory reconnaissance tool using graph theory to reveal hidden attack paths and privilege escalation routes.</p>
+                        <a href="https://github.com/BloodHoundAD/BloodHound" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Malware Analysis</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🔬</div>
+                            <h3>REMnux</h3>
+                        </div>
+                        <p>Linux toolkit for reverse-engineering and analyzing malicious software with extensive malware analysis tools.</p>
+                        <a href="https://remnux.org" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">🐦</div>
+                            <h3>Cuckoo Sandbox</h3>
+                        </div>
+                        <p>Automated malware analysis system for dynamic behavioral analysis in isolated environments.</p>
+                        <a href="https://cuckoosandbox.org" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <div class="tool-icon">👻</div>
+                            <h3>Ghidra</h3>
+                        </div>
+                        <p>NSA's software reverse engineering suite for analyzing compiled code across multiple platforms.</p>
+                        <a href="https://ghidra-sre.org" target="_blank" class="tool-link">
+                            Visit Site →
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <div class="note" style="margin-top: 60px;">
+                <strong>Tool Integration</strong>
+                These tools are pre-configured in our Ludus environment or can be easily deployed using Ansible roles. Check the <a href="installation.html">installation guide</a> for setup instructions.
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Brennan's Cybersecurity Lab © 2025 | Built for the security community</p>
+        <p style="margin-top: 8px;">
+            <a href="https://github.com/BrennanCyberSec">GitHub</a> · 
+            <a href="https://ludus.cloud">Powered by Ludus</a>
+        </p>
+    </footer>
+</body>
+</html>

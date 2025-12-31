@@ -2,6 +2,10 @@
 title: Labs
 ---
 
+[Home](/) · [Labs](/labs/) · [Installation](/installation/) · [Tools](/tools/) · [About](/about/)
+
+---
+
 # Labs
 
 ## Detection & Log Analysis

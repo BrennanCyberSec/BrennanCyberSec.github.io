@@ -249,11 +249,6 @@ body {
     transform: translateY(-2px);
 }
 
-.feature-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-}
-
 .feature-card h3 {
     font-size: 20px;
     font-weight: 600;
@@ -430,11 +425,12 @@ code {
 
 pre {
     background: #161b22;
-    border: 1px solid #30363d;
+    border: 2px solid #000;
     border-radius: 6px;
     padding: 16px;
     margin: 16px 0;
     overflow-x: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 pre code {
@@ -444,6 +440,25 @@ pre code {
     color: #c9d1d9;
     font-size: 13px;
     line-height: 1.5;
+}
+
+/* Screenshots and Images */
+img {
+    border: 2px solid #000;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+    margin: 16px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.screenshot {
+    border: 2px solid #000;
+    border-radius: 6px;
+    max-width: 100%;
+    height: auto;
+    margin: 24px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Alert Boxes */
@@ -521,17 +536,6 @@ pre code {
 .tool-card:hover {
     border-color: #58a6ff;
     transform: translateY(-2px);
-}
-
-.tool-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.tool-icon {
-    font-size: 32px;
 }
 
 .tool-card h3 {

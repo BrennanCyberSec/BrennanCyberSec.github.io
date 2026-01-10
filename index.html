@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brennan's Cybersecurity Lab</title>
+    <title>Labs | Brennan's Cybersecurity Lab</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -16,8 +16,8 @@
                 Brennan's Cybersecurity Lab
             </a>
             <nav class="nav">
-                <a href="index.html" class="active">Home</a>
-                <a href="labs.html">Labs</a>
+                <a href="index.html">Home</a>
+                <a href="labs.html" class="active">Labs</a>
                 <a href="installation.html">Installation</a>
                 <a href="tools.html">Tools</a>
                 <a href="about.html">About</a>
@@ -31,92 +31,140 @@
         </div>
     </header>
 
-    <div class="hero-large">
-        <div class="hero-content">
-            <h1>🏛️ Brennan's Cybersecurity Lab</h1>
-            <p class="hero-subtitle">Building automated cyber environments for purple team testing, security research, and development</p>
-            <div class="badges">
-                <span class="badge purple">🏛️ Purple Team</span>
-                <span class="badge">🤖 Automated</span>
-                <span class="badge green">🚀 Fast Deployment</span>
-                <span class="badge blue">🤯 Complex Networks</span>
-            </div>
-            <div class="hero-buttons">
-                <a href="installation.html" class="btn-primary">Get Started →</a>
-                <a href="labs.html" class="btn-secondary">View Labs</a>
-            </div>
-        </div>
+    <div class="hero">
+        <h1>Security Labs</h1>
+        <p>Hands-on exercises for purple teaming, malware analysis, and detection engineering</p>
     </div>
 
     <div class="container">
         <div class="content-wide">
-            <section class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Security Research</h3>
-                    <p>Hands-on labs for malware analysis, exploit development, and defensive security techniques in controlled environments.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Automated Deployments</h3>
-                    <p>Spin up complete Active Directory environments, vulnerable machines, and security tools with simple commands.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Purple Teaming</h3>
-                    <p>Combine offensive and defensive techniques to improve detection capabilities and security posture.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛠️</div>
-                    <h3>Real-World Tools</h3>
-                    <p>Practice with industry-standard tools including Kali Purple, Elastic Stack, Velociraptor, and more.</p>
-                </div>
-            </section>
-
-            <section class="recent-section">
-                <h2>🔥 Featured Labs</h2>
+            <section>
+                <h2>Purple Team Labs</h2>
                 <div class="lab-grid">
                     <div class="lab-card">
                         <div class="lab-header">
                             <h3>Active Directory Attack & Defense</h3>
                             <span class="lab-badge purple">Purple Team</span>
                         </div>
-                        <p>Build a complete AD environment, perform attacks like Kerberoasting and AS-REP Roasting, then detect them with Elastic Security.</p>
+                        <p>Build a complete AD environment with domain controller and workstations. Perform attacks like Kerberoasting, AS-REP Roasting, and Pass-the-Hash, then detect them using Elastic Security and custom detection rules.</p>
                         <div class="lab-meta">
-                            <span>⏱️ 2-3 hours</span>
-                            <span>📊 Intermediate</span>
+                            <span>2-3 hours</span>
+                            <span>Intermediate</span>
                         </div>
                     </div>
+
                     <div class="lab-card">
                         <div class="lab-header">
-                            <h3>Malware Analysis Pipeline</h3>
-                            <span class="lab-badge red">Red Team</span>
+                            <h3>Command & Control Detection</h3>
+                            <span class="lab-badge purple">Purple Team</span>
                         </div>
-                        <p>Analyze malware samples in isolated environments using Remnux, Cuckoo Sandbox, and custom analysis scripts.</p>
+                        <p>Deploy popular C2 frameworks like Sliver and Covenant. Analyze their traffic patterns and build detection rules to identify C2 beaconing in your SIEM.</p>
                         <div class="lab-meta">
-                            <span>⏱️ 1-2 hours</span>
-                            <span>📊 Advanced</span>
+                            <span>2-3 hours</span>
+                            <span>Advanced</span>
                         </div>
                     </div>
+
                     <div class="lab-card">
                         <div class="lab-header">
-                            <h3>SIEM Detection Engineering</h3>
-                            <span class="lab-badge blue">Blue Team</span>
+                            <h3>Phishing Campaign Analysis</h3>
+                            <span class="lab-badge purple">Purple Team</span>
                         </div>
-                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK.</p>
+                        <p>Create and execute phishing campaigns using GoPhish, then analyze detection capabilities with email security tools and endpoint protection.</p>
                         <div class="lab-meta">
-                            <span>⏱️ 1-2 hours</span>
-                            <span>📊 Intermediate</span>
+                            <span>1-2 hours</span>
+                            <span>Intermediate</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section class="cta-section">
-                <h2>Ready to Build Your Lab?</h2>
-                <p>Follow the installation guide to set up your own purple teaming environment in minutes.</p>
-                <a href="installation.html" class="btn-primary-large">Start Building →</a>
+            <section>
+                <h2>Red Team Labs</h2>
+                <div class="lab-grid">
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Malware Analysis Pipeline</h3>
+                            <span class="lab-badge red">Red Team</span>
+                        </div>
+                        <p>Set up an isolated malware analysis environment with Remnux and Cuckoo Sandbox. Analyze real malware samples and understand their behavior, IOCs, and TTPs.</p>
+                        <div class="lab-meta">
+                            <span>1-2 hours</span>
+                            <span>Advanced</span>
+                        </div>
+                    </div>
+
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Custom Payload Development</h3>
+                            <span class="lab-badge red">Red Team</span>
+                        </div>
+                        <p>Develop custom malware in C/C++ with techniques like process injection, API hooking, and AV evasion. Test against modern endpoint security solutions.</p>
+                        <div class="lab-meta">
+                            <span>3-4 hours</span>
+                            <span>Advanced</span>
+                        </div>
+                    </div>
+
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Network Pivoting & Lateral Movement</h3>
+                            <span class="lab-badge red">Red Team</span>
+                        </div>
+                        <p>Practice advanced penetration testing techniques including SSH tunneling, port forwarding, and moving laterally through a multi-tier network.</p>
+                        <div class="lab-meta">
+                            <span>2-3 hours</span>
+                            <span>Advanced</span>
+                        </div>
+                    </div>
+                </div>
             </section>
+
+            <section>
+                <h2>Blue Team Labs</h2>
+                <div class="lab-grid">
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>SIEM Detection Engineering</h3>
+                            <span class="lab-badge blue">Blue Team</span>
+                        </div>
+                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK. Learn sigma rules and detection-as-code practices.</p>
+                        <div class="lab-meta">
+                            <span>1-2 hours</span>
+                            <span>Intermediate</span>
+                        </div>
+                    </div>
+
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Network Traffic Analysis</h3>
+                            <span class="lab-badge blue">Blue Team</span>
+                        </div>
+                        <p>Analyze malicious network traffic using Wireshark, Zeek, and Suricata. Identify suspicious patterns, C2 communications, and data exfiltration attempts.</p>
+                        <div class="lab-meta">
+                            <span>2 hours</span>
+                            <span>Intermediate</span>
+                        </div>
+                    </div>
+
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Incident Response Workflow</h3>
+                            <span class="lab-badge blue">Blue Team</span>
+                        </div>
+                        <p>Practice complete incident response procedures using TheHive for case management and Velociraptor for endpoint forensics and threat hunting.</p>
+                        <div class="lab-meta">
+                            <span>2-3 hours</span>
+                            <span>Advanced</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="note" style="margin-top: 60px;">
+                <strong>Lab Requirements</strong>
+                Most labs require a basic Ludus environment with Kali Purple and Windows VMs. Follow the <a href="installation.html">installation guide</a> to set up your environment first. Each lab includes detailed setup instructions and learning objectives.
+            </div>
         </div>
     </div>
 

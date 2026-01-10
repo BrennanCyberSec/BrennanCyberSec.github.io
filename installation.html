@@ -1,311 +1,67 @@
+# Complete HTML Site Package for GitHub Pages
+
+I'll create a full HTML site from scratch. Here's your complete file structure:
+
+##  File Structure
+```
+BrennanCyberSec.github.io/
+├── index.html              (Homepage)
+├── installation.html       (Installation Guide)
+├── labs.html              (Labs page)
+├── tools.html             (Tools page)
+├── about.html             (About page)
+├── assets/
+│   └── css/
+│       └── style.css      (Shared styles)
+└── README.md              (Keep for GitHub)
+```
+
+##  Files to DELETE:
+- `_config.yml`
+- `Gemfile`
+- `Gemfile.lock` (if exists)
+- `index.md`
+- All folders: `installation/`, `labs/`, `tools/`, `about/`
+
+##  Step-by-Step Instructions:
+
+### 1. **Backup First!**
+```bash
+# Clone your repo locally if you haven't
+git clone https://github.com/BrennanCyberSec/BrennanCyberSec.github.io.git
+cd BrennanCyberSec.github.io
+```
+
+### 2. **Delete Old Files**
+```bash
+# Delete Jekyll files
+rm _config.yml Gemfile index.md
+
+# Delete old folders (back them up first if needed!)
+rm -rf installation/ labs/ tools/ about/
+```
+
+### 3. **Create New Structure**
+```bash
+# Create assets folder
+mkdir -p assets/css
+```
+
+### 4. **Create All Files**
+I'll provide all the HTML files below. Copy each one into your repo.
+
+---
+
+##  File 1: `index.html` (Homepage)
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kali Purple Installation Guide | Brennan's Cybersecurity Lab</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #0d1117;
-            color: #c9d1d9;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            font-size: 16px;
-        }
-
-        .header {
-            background: #161b22;
-            border-bottom: 1px solid #30363d;
-            padding: 16px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .site-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #58a6ff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .site-title:hover {
-            color: #79c0ff;
-        }
-
-        .nav {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .nav a {
-            color: #c9d1d9;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav a:hover {
-            color: #58a6ff;
-        }
-
-        .github-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            background: #21262d;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            color: #c9d1d9;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .github-link:hover {
-            background: #30363d;
-            border-color: #8b949e;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 40px 32px;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 60px 0 40px 0;
-            border-bottom: 1px solid #21262d;
-            margin-bottom: 40px;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #8b949e;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .badges {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 24px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: #1f6feb;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #fff;
-        }
-
-        .badge.purple {
-            background: #8957e5;
-        }
-
-        .badge.green {
-            background: #2ea043;
-        }
-
-        .content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            font-size: 32px;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin: 48px 0 24px 0;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #21262d;
-        }
-
-        h3 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #f0f6fc;
-            margin: 32px 0 16px 0;
-        }
-
-        p {
-            margin-bottom: 16px;
-            color: #c9d1d9;
-            line-height: 1.7;
-        }
-
-        ul, ol {
-            margin: 16px 0 16px 24px;
-            color: #c9d1d9;
-        }
-
-        li {
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        code {
-            background: #161b22;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            color: #79c0ff;
-            border: 1px solid #30363d;
-        }
-
-        pre {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 16px;
-            margin: 16px 0;
-            overflow-x: auto;
-        }
-
-        pre code {
-            background: none;
-            padding: 0;
-            border: none;
-            color: #c9d1d9;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .note {
-            background: #1f2937;
-            border-left: 4px solid #58a6ff;
-            padding: 16px 20px;
-            margin: 24px 0;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .note strong {
-            color: #58a6ff;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .warning {
-            background: #2d1b1b;
-            border-left: 4px solid #f85149;
-        }
-
-        .warning strong {
-            color: #f85149;
-        }
-
-        .step {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 24px;
-            margin: 24px 0;
-        }
-
-        .step-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: #1f6feb;
-            color: #fff;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-            font-weight: 600;
-            margin-right: 12px;
-            font-size: 14px;
-        }
-
-        .step h3 {
-            display: inline-block;
-            margin: 0 0 16px 0;
-            font-size: 20px;
-        }
-
-        a {
-            color: #58a6ff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .footer {
-            border-top: 1px solid #21262d;
-            margin-top: 80px;
-            padding: 32px 0;
-            text-align: center;
-            color: #8b949e;
-            font-size: 14px;
-        }
-
-        .screenshot {
-            width: 100%;
-            border-radius: 6px;
-            border: 1px solid #30363d;
-            margin: 24px 0;
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero p {
-                font-size: 18px;
-            }
-
-            .container {
-                padding: 24px 16px;
-            }
-
-            .nav {
-                display: none;
-            }
-        }
-    </style>
+    <title>Brennan's Cybersecurity Lab</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header class="header">
@@ -317,11 +73,11 @@
                 Brennan's Cybersecurity Lab
             </a>
             <nav class="nav">
-                <a href="/">Home</a>
-                <a href="/labs">Labs</a>
-                <a href="/installation">Installation</a>
-                <a href="/tools">Tools</a>
-                <a href="/about">About</a>
+                <a href="index.html" class="active">Home</a>
+                <a href="labs.html">Labs</a>
+                <a href="installation.html">Installation</a>
+                <a href="tools.html">Tools</a>
+                <a href="about.html">About</a>
             </nav>
             <a href="https://github.com/BrennanCyberSec" class="github-link" target="_blank">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -332,147 +88,116 @@
         </div>
     </header>
 
-    <div class="hero">
-        <h1>Kali Purple Installation Guide</h1>
-        <p>Building a purple teaming environment for security research and testing</p>
-        <div class="badges">
-            <span class="badge purple">🏛️ Purple Team</span>
-            <span class="badge">🤖 Automated</span>
-            <span class="badge green">🚀 Fast Deployment</span>
+    <div class="hero-large">
+        <div class="hero-content">
+            <h1> Brennan's Cybersecurity Lab</h1>
+            <p class="hero-subtitle">Building automated cyber environments for purple team testing, security research, and development</p>
+            <div class="badges">
+                <span class="badge purple"> Purple Team</span>
+                <span class="badge"> Automated</span>
+                <span class="badge green"> Fast Deployment</span>
+                <span class="badge blue"> Complex Networks</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="installation.html" class="btn-primary">Get Started →</a>
+                <a href="labs.html" class="btn-secondary">View Labs</a>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="content">
-            <div class="note">
-                <strong>About This Guide</strong>
-                This guide walks you through setting up Kali Purple in a VMware environment, perfect for building your own purple teaming lab for security testing and development.
-            </div>
+        <div class="content-wide">
+            <section class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Security Research</h3>
+                    <p>Hands-on labs for malware analysis, exploit development, and defensive security techniques in controlled environments.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Automated Deployments</h3>
+                    <p>Spin up complete Active Directory environments, vulnerable machines, and security tools with simple commands.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Purple Teaming</h3>
+                    <p>Combine offensive and defensive techniques to improve detection capabilities and security posture.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Real-World Tools</h3>
+                    <p>Practice with industry-standard tools including Kali Purple, Elastic Stack, Velociraptor, and more.</p>
+                </div>
+            </section>
 
-            <h2>Prerequisites</h2>
-            <p>Before you begin, ensure your system meets these requirements:</p>
-            <ul>
-                <li>Virtualization enabled in BIOS/UEFI</li>
-                <li>16GB RAM minimum (32GB recommended for multiple VMs)</li>
-                <li>100GB+ available disk space</li>
-                <li>VMware Workstation or VMware Player installed</li>
-                <li>Kali Purple ISO or pre-built VMware image</li>
-            </ul>
+            <section class="recent-section">
+                <h2>🔥 Featured Labs</h2>
+                <div class="lab-grid">
+                    <a href="labs.html" class="lab-card">
+                        <div class="lab-header">
+                            <h3>Active Directory Attack & Defense</h3>
+                            <span class="lab-badge purple">Purple Team</span>
+                        </div>
+                        <p>Build a complete AD environment, perform attacks like Kerberoasting and AS-REP Roasting, then detect them with Elastic Security.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 2-3 hours</span>
+                            <span>📊 Intermediate</span>
+                        </div>
+                    </a>
+                    <a href="labs.html" class="lab-card">
+                        <div class="lab-header">
+                            <h3>Malware Analysis Pipeline</h3>
+                            <span class="lab-badge red">Red Team</span>
+                        </div>
+                        <p>Analyze malware samples in isolated environments using Remnux, Cuckoo Sandbox, and custom analysis scripts.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 1-2 hours</span>
+                            <span>📊 Advanced</span>
+                        </div>
+                    </a>
+                    <a href="labs.html" class="lab-card">
+                        <div class="lab-header">
+                            <h3>SIEM Detection Engineering</h3>
+                            <span class="lab-badge blue">Blue Team</span>
+                        </div>
+                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 1-2 hours</span>
+                            <span>📊 Intermediate</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
 
-            <h2>Installation Steps</h2>
-
-            <div class="step">
-                <span class="step-number">1</span>
-                <h3>Download Kali Purple</h3>
-                <p>Download the latest Kali Purple image from the official Kali Linux website. You can choose between:</p>
-                <ul>
-                    <li><strong>ISO Image</strong> - For fresh installations</li>
-                    <li><strong>VMware Image</strong> - Pre-configured and ready to go (recommended)</li>
-                </ul>
-                <p>Visit: <a href="https://www.kali.org/get-kali/#kali-platforms" target="_blank">https://www.kali.org/get-kali/</a></p>
-            </div>
-
-            <div class="step">
-                <span class="step-number">2</span>
-                <h3>Extract the VMware Image</h3>
-                <p>If you downloaded the VMware image, you'll need to extract it first.</p>
-                
-                <p><strong>On Linux:</strong></p>
-                <pre><code>sudo apt update && sudo apt install -y p7zip-full
-7z x kali-linux-*-vmware-amd64.7z</code></pre>
-
-                <p><strong>On Windows:</strong></p>
-                <ul>
-                    <li>Download and install <a href="https://www.7-zip.org/" target="_blank">7-Zip</a></li>
-                    <li>Right-click the downloaded file</li>
-                    <li>Click "Show more options" (Windows 11)</li>
-                    <li>Select "7-Zip" → "Extract Here"</li>
-                </ul>
-            </div>
-
-            <div class="step">
-                <span class="step-number">3</span>
-                <h3>Import to VMware</h3>
-                <p>Launch VMware and import the extracted virtual machine:</p>
-                <ol>
-                    <li>Open VMware Workstation/Player</li>
-                    <li>Click <strong>File</strong> → <strong>Open</strong></li>
-                    <li>Navigate to the extracted folder</li>
-                    <li>Select the <code>.vmx</code> file</li>
-                    <li>Click <strong>Open</strong></li>
-                </ol>
-            </div>
-
-            <div class="step">
-                <span class="step-number">4</span>
-                <h3>Configure VM Settings</h3>
-                <p>Before starting the VM, optimize the settings:</p>
-                <ol>
-                    <li>Right-click the VM and select <strong>Settings</strong></li>
-                    <li>Increase RAM to at least 4GB (8GB recommended)</li>
-                    <li>Allocate 2-4 CPU cores</li>
-                    <li>Set network adapter to <strong>NAT</strong> or <strong>Bridged</strong></li>
-                    <li>Click <strong>OK</strong> to save</li>
-                </ol>
-            </div>
-
-            <div class="step">
-                <span class="step-number">5</span>
-                <h3>First Boot and Update</h3>
-                <p>Power on the VM and perform initial updates:</p>
-                <pre><code>sudo apt update && sudo apt full-upgrade -y</code></pre>
-                <p>This ensures all security tools and the system are up to date.</p>
-            </div>
-
-            <div class="warning">
-                <strong>Security Note</strong>
-                Default credentials for Kali Purple: <code>kali:kali</code><br>
-                Change this immediately after first login for security.
-            </div>
-
-            <h2>Post-Installation Setup</h2>
-
-            <h3>Change Default Password</h3>
-            <pre><code>passwd</code></pre>
-
-            <h3>Install VMware Tools (if needed)</h3>
-            <pre><code>sudo apt install -y open-vm-tools open-vm-tools-desktop
-sudo reboot</code></pre>
-
-            <h3>Configure Purple Team Tools</h3>
-            <p>Kali Purple comes with pre-installed defensive security tools. Access them through:</p>
-            <ul>
-                <li><strong>TheHive</strong> - Case management platform</li>
-                <li><strong>Elasticsearch</strong> - Search and analytics engine</li>
-                <li><strong>Kibana</strong> - Data visualization dashboard</li>
-                <li><strong>Suricata</strong> - Network IDS/IPS</li>
-                <li><strong>Malcolm</strong> - Network traffic analysis</li>
-            </ul>
-
-            <div class="note">
-                <strong>Pro Tip</strong>
-                Snapshot your VM after completing the initial setup. This allows you to quickly revert to a clean state when testing different configurations or after malware analysis.
-            </div>
-
-            <h2>Next Steps</h2>
-            <p>Now that Kali Purple is installed, you can:</p>
-            <ul>
-                <li>Configure your defensive security stack</li>
-                <li>Set up additional VMs for your lab environment</li>
-                <li>Integrate with tools like Ludus for automated deployments</li>
-                <li>Start practicing purple team exercises</li>
-            </ul>
-
-            <p>Check out the <a href="/labs">Labs section</a> for guided exercises and scenarios.</p>
+            <section class="cta-section">
+                <h2>Ready to Build Your Lab?</h2>
+                <p>Follow the installation guide to set up your own purple teaming environment in minutes.</p>
+                <a href="installation.html" class="btn-primary-large">Start Building →</a>
+            </section>
         </div>
     </div>
 
     <footer class="footer">
         <p>Brennan's Cybersecurity Lab © 2025 | Built for the security community</p>
         <p style="margin-top: 8px;">
-            <a href="https://github.com/BrennanCyberSec" style="color: #8b949e;">GitHub</a> · 
-            <a href="https://ludus.cloud" style="color: #8b949e;">Powered by Ludus</a>
+            <a href="https://github.com/BrennanCyberSec">GitHub</a> · 
+            <a href="https://ludus.cloud">Powered by Ludus</a>
         </p>
     </footer>
 </body>
 </html>
+```
+
+---
+
+## 📄 File 2: `installation.html`
+
+(This is the installation guide I already created - same content)
+
+---
+
+## 📄 File 3: `assets/css/style.css`
+
+This is the master stylesheet that all pages use. I'll create it in the next artifact.
+
+Would you like me to continue with the remaining files (labs.html, tools.html, about.html, and style.css)?

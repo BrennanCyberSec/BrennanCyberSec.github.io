@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools | Brennan's Cybersecurity Lab</title>
+    <title>Brennan's Cybersecurity Lab</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -16,10 +16,10 @@
                 Brennan's Cybersecurity Lab
             </a>
             <nav class="nav">
-                <a href="index.html">Home</a>
+                <a href="index.html" class="active">Home</a>
                 <a href="labs.html">Labs</a>
                 <a href="installation.html">Installation</a>
-                <a href="tools.html" class="active">Tools</a>
+                <a href="tools.html">Tools</a>
                 <a href="about.html">About</a>
             </nav>
             <a href="https://github.com/BrennanCyberSec" class="github-link" target="_blank">
@@ -31,181 +31,88 @@
         </div>
     </header>
 
-    <div class="hero">
-        <h1>Security Tools</h1>
-        <p>Essential tools and frameworks used in our lab environment</p>
+    <div class="hero-large">
+        <div class="hero-content">
+            <h1>Brennan's Cybersecurity Lab</h1>
+            <p class="hero-subtitle">Building automated cyber environments for purple team testing, security research, and development</p>
+            <div class="badges">
+                <span class="badge purple">Purple Team</span>
+                <span class="badge">Automated</span>
+                <span class="badge green">Fast Deployment</span>
+                <span class="badge blue">Complex Networks</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="installation.html" class="btn-primary">Get Started →</a>
+                <a href="labs.html" class="btn-secondary">View Labs</a>
+            </div>
+        </div>
     </div>
 
     <div class="container">
         <div class="content-wide">
-            <section>
-                <h2>Infrastructure & Automation</h2>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h3>Ludus</h3>
-                        <p>Self-hosted cyber range platform for building automated, multi-user lab environments with complex networks on Proxmox.</p>
-                        <a href="https://ludus.cloud" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
+            <section class="features-grid">
+                <div class="feature-card">
+                    <h3>Security Research</h3>
+                    <p>Hands-on labs for malware analysis, exploit development, and defensive security techniques in controlled environments.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Automated Deployments</h3>
+                    <p>Spin up complete Active Directory environments, vulnerable machines, and security tools with simple commands.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Purple Teaming</h3>
+                    <p>Combine offensive and defensive techniques to improve detection capabilities and security posture.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Real-World Tools</h3>
+                    <p>Practice with industry-standard tools including Kali Purple, Elastic Stack, Velociraptor, and more.</p>
+                </div>
+            </section>
 
-                    <div class="tool-card">
-                        <h3>Proxmox VE</h3>
-                        <p>Open-source server virtualization platform that powers our lab infrastructure with KVM virtualization and container support.</p>
-                        <a href="https://www.proxmox.com" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
+            <section class="recent-section">
+                <h2>Featured Labs</h2>
+                <div class="lab-grid">
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Active Directory Attack & Defense</h3>
+                            <span class="lab-badge purple">Purple Team</span>
+                        </div>
+                        <p>Build a complete AD environment, perform attacks like Kerberoasting and AS-REP Roasting, then detect them with Elastic Security.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 2-3 hours</span>
+                            <span>📊 Intermediate</span>
+                        </div>
                     </div>
-
-                    <div class="tool-card">
-                        <h3>Ansible</h3>
-                        <p>Infrastructure automation tool for configuration management, application deployment, and orchestrating complex lab setups.</p>
-                        <a href="https://www.ansible.com" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>Malware Analysis Pipeline</h3>
+                            <span class="lab-badge red">Red Team</span>
+                        </div>
+                        <p>Analyze malware samples in isolated environments using Remnux, Cuckoo Sandbox, and custom analysis scripts.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 1-2 hours</span>
+                            <span>📊 Advanced</span>
+                        </div>
+                    </div>
+                    <div class="lab-card">
+                        <div class="lab-header">
+                            <h3>SIEM Detection Engineering</h3>
+                            <span class="lab-badge blue">Blue Team</span>
+                        </div>
+                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK.</p>
+                        <div class="lab-meta">
+                            <span>⏱️ 1-2 hours</span>
+                            <span>📊 Intermediate</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section>
-                <h2>Detection & Response</h2>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h3>Elastic Security</h3>
-                        <p>Unified SIEM and endpoint security platform for threat detection, investigation, and response with powerful analytics.</p>
-                        <a href="https://www.elastic.co/security" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Velociraptor</h3>
-                        <p>Advanced digital forensics and incident response tool for endpoint visibility, threat hunting, and artifact collection.</p>
-                        <a href="https://docs.velociraptor.app" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>TheHive</h3>
-                        <p>Open-source security incident response platform designed for SOCs, CSIRTs, and security teams for case management.</p>
-                        <a href="https://thehive-project.org" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Suricata</h3>
-                        <p>High-performance network IDS, IPS, and security monitoring engine with multi-threaded detection capabilities.</p>
-                        <a href="https://suricata.io" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Wazuh</h3>
-                        <p>Open-source security platform providing unified XDR and SIEM protection for workloads across cloud and on-premises.</p>
-                        <a href="https://wazuh.com" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Wireshark</h3>
-                        <p>World's leading network protocol analyzer for deep packet inspection and traffic analysis.</p>
-                        <a href="https://www.wireshark.org" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-                </div>
+            <section class="cta-section">
+                <h2>Ready to Build Your Lab?</h2>
+                <p>Follow the installation guide to set up your own purple teaming environment in minutes.</p>
+                <a href="installation.html" class="btn-primary-large">Start Building →</a>
             </section>
-
-            <section>
-                <h2>Offensive Security</h2>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h3>Kali Purple</h3>
-                        <p>Defensive security distribution combining offensive tools with defensive SOC capabilities for purple teaming.</p>
-                        <a href="https://www.kali.org/blog/kali-linux-2023-1-release/" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Metasploit</h3>
-                        <p>Penetration testing framework with extensive exploit database, payload generation, and post-exploitation capabilities.</p>
-                        <a href="https://www.metasploit.com" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Sliver</h3>
-                        <p>Open-source cross-platform adversary simulation and red team framework with modern C2 capabilities.</p>
-                        <a href="https://github.com/BishopFox/sliver" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Covenant</h3>
-                        <p>.NET command and control framework emphasizing security operations and red team engagements.</p>
-                        <a href="https://github.com/cobbr/Covenant" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>GoPhish</h3>
-                        <p>Open-source phishing framework for security awareness training and testing email security controls.</p>
-                        <a href="https://getgophish.com" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Bloodhound</h3>
-                        <p>Active Directory reconnaissance tool using graph theory to reveal hidden attack paths and privilege escalation routes.</p>
-                        <a href="https://github.com/BloodHoundAD/BloodHound" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2>Malware Analysis</h2>
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <h3>REMnux</h3>
-                        <p>Linux toolkit for reverse-engineering and analyzing malicious software with extensive malware analysis tools.</p>
-                        <a href="https://remnux.org" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Cuckoo Sandbox</h3>
-                        <p>Automated malware analysis system for dynamic behavioral analysis in isolated environments.</p>
-                        <a href="https://cuckoosandbox.org" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-
-                    <div class="tool-card">
-                        <h3>Ghidra</h3>
-                        <p>NSA's software reverse engineering suite for analyzing compiled code across multiple platforms.</p>
-                        <a href="https://ghidra-sre.org" target="_blank" class="tool-link">
-                            Visit Site →
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <div class="note" style="margin-top: 60px;">
-                <strong>Tool Integration</strong>
-                These tools are pre-configured in our Ludus environment or can be easily deployed using Ansible roles. Check the <a href="installation.html">installation guide</a> for setup instructions.
-            </div>
         </div>
     </div>
 

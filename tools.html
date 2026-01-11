@@ -3,125 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brennan's Cybersecurity Lab</title>
+    <meta name="description" content="Security tools and technologies used by Brennan Vigna - SIEM, network monitoring, endpoint security, and analysis frameworks.">
+    <meta name="author" content="Brennan Vigna">
+    <title>Tools | Brennan Vigna</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <header class="header">
         <div class="header-content">
             <a href="index.html" class="site-title">
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-                Brennan's Cybersecurity Lab
+                <span class="site-logo">BV</span>
+                Brennan Vigna
             </a>
-            <nav class="nav">
-                <a href="index.html" class="active">Home</a>
+            <nav class="nav" id="main-nav" aria-label="Main navigation">
+                <a href="index.html">Home</a>
                 <a href="labs.html">Labs</a>
-                <a href="installation.html">Installation</a>
-                <a href="tools.html">Tools</a>
-                <a href="about.html">About</a>
+                <a href="tools.html" class="active" aria-current="page">Tools</a>
+                <a href="resume.html">Resume</a>
+                <a href="contact.html">Contact</a>
             </nav>
-            <a href="https://github.com/BrennanCyberSec" class="github-link" target="_blank">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-                View on GitHub
-            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-nav">
+                <span class="hamburger"></span>
+            </button>
         </div>
+        <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+            <a href="index.html">Home</a>
+            <a href="labs.html">Labs</a>
+            <a href="tools.html" class="active">Tools</a>
+            <a href="resume.html">Resume</a>
+            <a href="contact.html">Contact</a>
+        </nav>
     </header>
 
-    <div class="hero-large">
-        <div class="hero-content">
-            <h1>Brennan's Cybersecurity Lab</h1>
-            <p class="hero-subtitle">Building automated cyber environments for purple team testing, security research, and development</p>
-            <div class="badges">
-                <span class="badge purple">Purple Team</span>
-                <span class="badge">Automated</span>
-                <span class="badge green">Fast Deployment</span>
-                <span class="badge blue">Complex Networks</span>
-            </div>
-            <div class="hero-buttons">
-                <a href="installation.html" class="btn-primary">Get Started →</a>
-                <a href="labs.html" class="btn-secondary">View Labs</a>
+    <main id="main-content">
+        <div class="hero">
+            <h1>Tool Stack</h1>
+            <p>Security tools and technologies I work with for detection engineering, threat hunting, and security operations.</p>
+        </div>
+
+        <div class="container">
+            <div class="content-wide">
+
+                <!-- SIEM & Log Management -->
+                <section class="tools-section">
+                    <h2>SIEM & Log Management</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">SIEM Platform</span>
+                            <h3>Elastic Stack (ELK)</h3>
+                            <p>Elasticsearch, Logstash, and Kibana for log aggregation, parsing, and visualization. Building detection rules and dashboards for security monitoring.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">SIEM Platform</span>
+                            <h3>Splunk</h3>
+                            <p>Enterprise SIEM platform for security analytics, threat detection, and incident investigation using SPL queries.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Detection Rules</span>
+                            <h3>Sigma Rules</h3>
+                            <p>Generic signature format for SIEM systems. Converting and deploying detection rules across multiple platforms.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Network Security -->
+                <section class="tools-section">
+                    <h2>Network Security</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">IDS/IPS</span>
+                            <h3>Suricata</h3>
+                            <p>High-performance network IDS, IPS, and security monitoring engine. Writing and tuning detection rules for network threats.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Network Analysis</span>
+                            <h3>Zeek (Bro)</h3>
+                            <p>Network analysis framework for security monitoring. Generating connection logs and protocol-specific metadata.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Packet Analysis</span>
+                            <h3>Wireshark</h3>
+                            <p>Deep packet inspection and protocol analysis. Investigating network anomalies and extracting indicators of compromise.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Packet Analysis</span>
+                            <h3>tcpdump</h3>
+                            <p>Command-line packet capture and analysis for quick network diagnostics and traffic filtering.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Endpoint Security -->
+                <section class="tools-section">
+                    <h2>Endpoint Security</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">System Monitoring</span>
+                            <h3>Sysmon</h3>
+                            <p>Windows system monitoring providing detailed event logging for process creation, network connections, and file changes.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Endpoint Protection</span>
+                            <h3>Windows Defender</h3>
+                            <p>Built-in endpoint protection with advanced threat detection, attack surface reduction, and EDR capabilities.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">System Analysis</span>
+                            <h3>Sysinternals Suite</h3>
+                            <p>Process Explorer, Process Monitor, Autoruns, and other utilities for deep Windows system analysis and troubleshooting.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Threat Intelligence -->
+                <section class="tools-section">
+                    <h2>Threat Intelligence & Analysis</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">Malware Analysis</span>
+                            <h3>VirusTotal</h3>
+                            <p>Multi-scanner platform for file and URL analysis. Investigating suspicious samples and gathering threat intelligence.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">URL Analysis</span>
+                            <h3>URLScan.io</h3>
+                            <p>Website scanning service for analyzing suspicious URLs, checking for phishing indicators and malicious content.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Sandbox</span>
+                            <h3>Any.Run</h3>
+                            <p>Interactive malware analysis sandbox for observing malware behavior in a controlled environment.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Attack Framework</span>
+                            <h3>MITRE ATT&CK</h3>
+                            <p>Knowledge base of adversary tactics and techniques. Mapping detections and understanding attack patterns.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scripting & Automation -->
+                <section class="tools-section">
+                    <h2>Scripting & Automation</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">Scripting</span>
+                            <h3>PowerShell</h3>
+                            <p>Windows automation and security scripting. Building tools for log analysis, system hardening, and incident response.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Scripting</span>
+                            <h3>Bash</h3>
+                            <p>Linux shell scripting for automation, log processing, and security tool integration.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Programming</span>
+                            <h3>Python</h3>
+                            <p>Security automation, data analysis, and custom tool development for security operations.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lab Environment -->
+                <section class="tools-section">
+                    <h2>Lab Environment</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <span class="tool-category">Purple Team</span>
+                            <h3>Kali Purple</h3>
+                            <p>Defensive security distribution with integrated SOC tools. Building purple team lab environments for detection testing.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Virtualization</span>
+                            <h3>VMware / VirtualBox</h3>
+                            <p>Creating isolated lab environments for safe security testing and malware analysis.</p>
+                        </div>
+                        <div class="tool-card">
+                            <span class="tool-category">Malware Analysis</span>
+                            <h3>FlareVM</h3>
+                            <p>Windows-based malware analysis distribution with pre-configured reverse engineering and analysis tools.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="info">
+                    <strong>Continuous Learning</strong>
+                    This list represents my current working knowledge. I'm constantly expanding my toolkit through hands-on practice and new lab exercises.
+                </div>
+
             </div>
         </div>
-    </div>
-
-    <div class="container">
-        <div class="content-wide">
-            <section class="features-grid">
-                <div class="feature-card">
-                    <h3>Security Research</h3>
-                    <p>Hands-on labs for malware analysis, exploit development, and defensive security techniques in controlled environments.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Automated Deployments</h3>
-                    <p>Spin up complete Active Directory environments, vulnerable machines, and security tools with simple commands.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Purple Teaming</h3>
-                    <p>Combine offensive and defensive techniques to improve detection capabilities and security posture.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Real-World Tools</h3>
-                    <p>Practice with industry-standard tools including Kali Purple, Elastic Stack, Velociraptor, and more.</p>
-                </div>
-            </section>
-
-            <section class="recent-section">
-                <h2>Featured Labs</h2>
-                <div class="lab-grid">
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Active Directory Attack & Defense</h3>
-                            <span class="lab-badge purple">Purple Team</span>
-                        </div>
-                        <p>Build a complete AD environment, perform attacks like Kerberoasting and AS-REP Roasting, then detect them with Elastic Security.</p>
-                        <div class="lab-meta">
-                            <span>⏱️ 2-3 hours</span>
-                            <span>📊 Intermediate</span>
-                        </div>
-                    </div>
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Malware Analysis Pipeline</h3>
-                            <span class="lab-badge red">Red Team</span>
-                        </div>
-                        <p>Analyze malware samples in isolated environments using Remnux, Cuckoo Sandbox, and custom analysis scripts.</p>
-                        <div class="lab-meta">
-                            <span>⏱️ 1-2 hours</span>
-                            <span>📊 Advanced</span>
-                        </div>
-                    </div>
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>SIEM Detection Engineering</h3>
-                            <span class="lab-badge blue">Blue Team</span>
-                        </div>
-                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK.</p>
-                        <div class="lab-meta">
-                            <span>⏱️ 1-2 hours</span>
-                            <span>📊 Intermediate</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="cta-section">
-                <h2>Ready to Build Your Lab?</h2>
-                <p>Follow the installation guide to set up your own purple teaming environment in minutes.</p>
-                <a href="installation.html" class="btn-primary-large">Start Building →</a>
-            </section>
-        </div>
-    </div>
+    </main>
 
     <footer class="footer">
-        <p>Brennan's Cybersecurity Lab © 2025 | Built for the security community</p>
-        <p style="margin-top: 8px;">
-            <a href="https://github.com/BrennanCyberSec">GitHub</a> · 
-            <a href="https://ludus.cloud">Powered by Ludus</a>
-        </p>
+        <div class="footer-content">
+            <p>Brennan Vigna © 2025 · Cybersecurity Student & IT Professional</p>
+            <div class="footer-links">
+                <a href="https://github.com/BrennanCyberSec" aria-label="GitHub Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/brennan-vigna-783863263/" aria-label="LinkedIn Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="mailto:bvigna42@gmail.com" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+            </div>
+        </div>
     </footer>
+
+    <script src="assets/js/nav.js"></script>
 </body>
 </html>

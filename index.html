@@ -3,176 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Labs | Brennan's Cybersecurity Lab</title>
+    <title>Brennan Vigna | Cybersecurity Portfolio</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="index.html" class="site-title">
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-                Brennan's Cybersecurity Lab
-            </a>
+            <a href="index.html" class="site-title">Brennan Vigna</a>
             <nav class="nav">
-                <a href="index.html">Home</a>
-                <a href="labs.html" class="active">Labs</a>
-                <a href="installation.html">Installation</a>
+                <a href="index.html" class="active">Home</a>
+                <a href="labs.html">Labs</a>
                 <a href="tools.html">Tools</a>
-                <a href="about.html">About</a>
+                <a href="resume.html">Resume</a>
+                <a href="contact.html">Contact</a>
             </nav>
-            <a href="https://github.com/BrennanCyberSec" class="github-link" target="_blank">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-                </svg>
-                View on GitHub
-            </a>
         </div>
     </header>
 
-    <div class="hero">
-        <h1>Security Labs</h1>
-        <p>Hands-on exercises for purple teaming, malware analysis, and detection engineering</p>
+    <div class="hero-large">
+        <div class="hero-content">
+            <h1>Brennan Vigna</h1>
+            <p class="hero-subtitle">Cybersecurity Student | IT Support Analyst | Blue Team Focused</p>
+            <div class="badges">
+                <span class="badge purple">Purple Team</span>
+                <span class="badge blue">Detection Engineering</span>
+                <span class="badge green">SOC Operations</span>
+                <span class="badge orange">Hands-On Labs</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="labs.html" class="btn-primary">View Labs</a>
+                <a href="contact.html" class="btn-secondary">Get In Touch</a>
+            </div>
+        </div>
     </div>
 
     <div class="container">
-        <div class="content-wide">
-            <section>
-                <h2>Purple Team Labs</h2>
-                <div class="lab-grid">
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Active Directory Attack & Defense</h3>
-                            <span class="lab-badge purple">Purple Team</span>
-                        </div>
-                        <p>Build a complete AD environment with domain controller and workstations. Perform attacks like Kerberoasting, AS-REP Roasting, and Pass-the-Hash, then detect them using Elastic Security and custom detection rules.</p>
-                        <div class="lab-meta">
-                            <span>2-3 hours</span>
-                            <span>Intermediate</span>
-                        </div>
-                    </div>
+        <div class="content">
+            <section class="about-section">
+                <h2>About Me</h2>
+                <p>I'm a cybersecurity student at Walsh College pursuing a Bachelor's in Information Technology with a focus on cybersecurity, set to graduate in June 2026. Currently working as an IT Support Analyst at Sehi Computer Products, where I investigate security alerts, analyze phishing attempts, and support system hardening efforts.</p>
+                
+                <p>This portfolio documents my journey in cybersecurity through hands-on lab exercises, security research, and practical skill development. My focus is on blue team operations, detection engineering, and building the technical expertise needed for SOC analyst and security operations roles.</p>
 
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Command & Control Detection</h3>
-                            <span class="lab-badge purple">Purple Team</span>
-                        </div>
-                        <p>Deploy popular C2 frameworks like Sliver and Covenant. Analyze their traffic patterns and build detection rules to identify C2 beaconing in your SIEM.</p>
-                        <div class="lab-meta">
-                            <span>2-3 hours</span>
-                            <span>Advanced</span>
-                        </div>
+                <div class="about-grid">
+                    <div class="about-item">
+                        <h3>Current Focus</h3>
+                        <p>Building practical skills in threat detection, incident response, and security monitoring through hands-on lab environments. Working with tools like ELK Stack, Suricata, Wireshark, and Sysmon to develop real-world SOC capabilities.</p>
                     </div>
-
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Phishing Campaign Analysis</h3>
-                            <span class="lab-badge purple">Purple Team</span>
-                        </div>
-                        <p>Create and execute phishing campaigns using GoPhish, then analyze detection capabilities with email security tools and endpoint protection.</p>
-                        <div class="lab-meta">
-                            <span>1-2 hours</span>
-                            <span>Intermediate</span>
-                        </div>
+                    <div class="about-item">
+                        <h3>Technical Background</h3>
+                        <p>Experience in Windows system administration, Active Directory, endpoint security, phishing analysis, and network troubleshooting. Proficient in PowerShell scripting and familiar with Linux environments for security operations.</p>
+                    </div>
+                    <div class="about-item">
+                        <h3>Learning Approach</h3>
+                        <p>I learn by doing - building labs, breaking things, detecting the attacks, and documenting the entire process. Every exercise here represents hands-on experience with real security tools and techniques used in production SOC environments.</p>
+                    </div>
+                    <div class="about-item">
+                        <h3>Career Goals</h3>
+                        <p>Seeking opportunities in SOC operations, security analysis, or incident response roles where I can apply my technical skills and continue developing expertise in threat detection and security monitoring.</p>
                     </div>
                 </div>
             </section>
 
             <section>
-                <h2>Red Team Labs</h2>
+                <h2>What You'll Find Here</h2>
                 <div class="lab-grid">
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Malware Analysis Pipeline</h3>
-                            <span class="lab-badge red">Red Team</span>
-                        </div>
-                        <p>Set up an isolated malware analysis environment with Remnux and Cuckoo Sandbox. Analyze real malware samples and understand their behavior, IOCs, and TTPs.</p>
-                        <div class="lab-meta">
-                            <span>1-2 hours</span>
-                            <span>Advanced</span>
-                        </div>
+                    <div class="card">
+                        <h3>Security Labs</h3>
+                        <p>Documented exercises covering detection engineering, threat hunting, incident response, and security monitoring. Each lab includes setup details, methodology, findings, and lessons learned.</p>
                     </div>
-
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Custom Payload Development</h3>
-                            <span class="lab-badge red">Red Team</span>
-                        </div>
-                        <p>Develop custom malware in C/C++ with techniques like process injection, API hooking, and AV evasion. Test against modern endpoint security solutions.</p>
-                        <div class="lab-meta">
-                            <span>3-4 hours</span>
-                            <span>Advanced</span>
-                        </div>
+                    <div class="card">
+                        <h3>Tool Stack</h3>
+                        <p>Overview of the security tools and technologies I'm working with, including SIEM platforms, network monitoring tools, endpoint security solutions, and analysis frameworks.</p>
                     </div>
-
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Network Pivoting & Lateral Movement</h3>
-                            <span class="lab-badge red">Red Team</span>
-                        </div>
-                        <p>Practice advanced penetration testing techniques including SSH tunneling, port forwarding, and moving laterally through a multi-tier network.</p>
-                        <div class="lab-meta">
-                            <span>2-3 hours</span>
-                            <span>Advanced</span>
-                        </div>
+                    <div class="card">
+                        <h3>Technical Documentation</h3>
+                        <p>Step-by-step guides, configuration notes, and technical write-ups that demonstrate my understanding of security concepts and ability to communicate technical information clearly.</p>
                     </div>
                 </div>
             </section>
 
             <section>
-                <h2>Blue Team Labs</h2>
-                <div class="lab-grid">
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>SIEM Detection Engineering</h3>
-                            <span class="lab-badge blue">Blue Team</span>
-                        </div>
-                        <p>Create custom detection rules in Elastic Security for common attack techniques mapped to MITRE ATT&CK. Learn sigma rules and detection-as-code practices.</p>
-                        <div class="lab-meta">
-                            <span>1-2 hours</span>
-                            <span>Intermediate</span>
-                        </div>
-                    </div>
-
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Network Traffic Analysis</h3>
-                            <span class="lab-badge blue">Blue Team</span>
-                        </div>
-                        <p>Analyze malicious network traffic using Wireshark, Zeek, and Suricata. Identify suspicious patterns, C2 communications, and data exfiltration attempts.</p>
-                        <div class="lab-meta">
-                            <span>2 hours</span>
-                            <span>Intermediate</span>
-                        </div>
-                    </div>
-
-                    <div class="lab-card">
-                        <div class="lab-header">
-                            <h3>Incident Response Workflow</h3>
-                            <span class="lab-badge blue">Blue Team</span>
-                        </div>
-                        <p>Practice complete incident response procedures using TheHive for case management and Velociraptor for endpoint forensics and threat hunting.</p>
-                        <div class="lab-meta">
-                            <span>2-3 hours</span>
-                            <span>Advanced</span>
-                        </div>
-                    </div>
+                <h2>Current Projects</h2>
+                <div class="card">
+                    <h3>Enterprise SOC Lab Environment</h3>
+                    <p>Building a comprehensive purple team lab with Kali Purple, including multi-layered detection capabilities across network (Suricata, Zeek), endpoint (Sysmon, Defender), and SIEM (ELK, Splunk) layers. The environment simulates enterprise security operations for hands-on detection engineering and incident response practice.</p>
+                    <p style="color: #8b949e; margin-top: 12px;">Status: In Progress - Lab documentation will be added as exercises are completed</p>
                 </div>
             </section>
 
-            <div class="note" style="margin-top: 60px;">
-                <strong>Lab Requirements</strong>
-                Most labs require a basic Ludus environment with Kali Purple and Windows VMs. Follow the <a href="installation.html">installation guide</a> to set up your environment first. Each lab includes detailed setup instructions and learning objectives.
+            <div class="info" style="margin-top: 60px;">
+                <strong>Portfolio Purpose</strong>
+                This site serves as both a learning journal and a demonstration of practical cybersecurity skills for prospective employers. All exercises are performed in isolated lab environments following responsible security research practices.
             </div>
         </div>
     </div>
 
     <footer class="footer">
-        <p>Brennan's Cybersecurity Lab © 2025 | Built for the security community</p>
+        <p>Brennan Vigna © 2025 | Cybersecurity Student & IT Professional</p>
         <p style="margin-top: 8px;">
             <a href="https://github.com/BrennanCyberSec">GitHub</a> · 
-            <a href="https://ludus.cloud">Powered by Ludus</a>
+            <a href="https://www.linkedin.com/in/brennan-vigna-783863263/">LinkedIn</a> ·
+            <a href="mailto:bvigna42@gmail.com">Email</a>
         </p>
     </footer>
 </body>

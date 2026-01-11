@@ -1,4 +1,4 @@
-/* Master Stylesheet for Brennan's Cybersecurity Lab */
+/* Brennan Vigna - Cybersecurity Portfolio Master Stylesheet */
 
 * {
     margin: 0;
@@ -14,7 +14,7 @@ body {
     font-size: 16px;
 }
 
-/* Header Styles */
+/* Header & Navigation */
 .header {
     background: #161b22;
     border-bottom: 1px solid #30363d;
@@ -71,25 +71,6 @@ body {
 .nav a.active {
     color: #58a6ff;
     background: #1f6feb20;
-}
-
-.github-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    background: #21262d;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    color: #c9d1d9;
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-.github-link:hover {
-    background: #30363d;
-    border-color: #8b949e;
 }
 
 /* Hero Sections */
@@ -159,8 +140,8 @@ body {
     background: #1f6feb;
 }
 
-.badge.red {
-    background: #da3633;
+.badge.orange {
+    background: #d29922;
 }
 
 .hero-buttons {
@@ -228,40 +209,70 @@ body {
     margin: 0 auto;
 }
 
-/* Feature Grid */
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-    margin: 40px 0;
-}
-
-.feature-card {
+/* About Section */
+.about-section {
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 8px;
-    padding: 32px 24px;
+    padding: 40px;
+    margin: 40px 0;
+}
+
+.about-section h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #f0f6fc;
+    margin-bottom: 20px;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.about-item h3 {
+    font-size: 18px;
+    color: #58a6ff;
+    margin-bottom: 8px;
+}
+
+.about-item p {
+    color: #8b949e;
+    line-height: 1.6;
+}
+
+/* Cards */
+.card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 32px;
+    margin: 24px 0;
     transition: all 0.2s;
 }
 
-.feature-card:hover {
+.card:hover {
     border-color: #58a6ff;
     transform: translateY(-2px);
 }
 
-.feature-card h3 {
+.card h3 {
     font-size: 20px;
     font-weight: 600;
     color: #f0f6fc;
     margin-bottom: 12px;
 }
 
-.feature-card p {
+.card p {
     color: #8b949e;
     line-height: 1.6;
 }
 
-/* Lab Grid */
+/* Lab Cards */
 .lab-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -336,38 +347,127 @@ body {
     margin-top: 12px;
 }
 
-/* Sections */
-.recent-section {
-    margin: 60px 0;
+.lab-date {
+    font-size: 14px;
+    color: #8b949e;
+    margin-top: 8px;
 }
 
-.recent-section h2 {
-    font-size: 32px;
-    font-weight: 600;
-    color: #f0f6fc;
-    margin-bottom: 24px;
+/* Tools Grid */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin: 24px 0;
 }
 
-.cta-section {
-    text-align: center;
-    padding: 60px 32px;
+.tool-card {
     background: #161b22;
     border: 1px solid #30363d;
-    border-radius: 12px;
-    margin: 60px 0;
+    border-radius: 8px;
+    padding: 24px;
+    transition: all 0.2s;
 }
 
-.cta-section h2 {
-    font-size: 32px;
+.tool-card:hover {
+    border-color: #58a6ff;
+    transform: translateY(-2px);
+}
+
+.tool-card h3 {
+    font-size: 18px;
     font-weight: 600;
     color: #f0f6fc;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
-.cta-section p {
-    font-size: 18px;
+.tool-card p {
     color: #8b949e;
-    margin-bottom: 32px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.tool-category {
+    color: #58a6ff;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Contact Page */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin: 40px 0;
+}
+
+.contact-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.contact-card:hover {
+    border-color: #58a6ff;
+    transform: translateY(-2px);
+}
+
+.contact-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px auto;
+    display: block;
+}
+
+.contact-card h3 {
+    font-size: 18px;
+    color: #f0f6fc;
+    margin-bottom: 8px;
+}
+
+.contact-card a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 16px;
+    word-break: break-all;
+}
+
+.contact-card a:hover {
+    text-decoration: underline;
+}
+
+.contact-card p {
+    color: #8b949e;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* Resume Embed */
+.resume-container {
+    background: #161b22;
+    border: 2px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 24px 0;
+}
+
+.resume-embed {
+    width: 100%;
+    height: 800px;
+    border: none;
+    border-radius: 4px;
+}
+
+.resume-download {
+    text-align: center;
+    margin-top: 16px;
 }
 
 /* Typography */
@@ -442,7 +542,7 @@ pre code {
     line-height: 1.5;
 }
 
-/* Screenshots and Images */
+/* Images */
 img {
     border: 2px solid #000;
     border-radius: 6px;
@@ -462,7 +562,7 @@ img {
 }
 
 /* Alert Boxes */
-.note, .warning {
+.note, .warning, .info {
     background: #1f2937;
     border-left: 4px solid #58a6ff;
     padding: 16px 20px;
@@ -470,7 +570,7 @@ img {
     border-radius: 0 6px 6px 0;
 }
 
-.note strong, .warning strong {
+.note strong, .warning strong, .info strong {
     color: #58a6ff;
     display: block;
     margin-bottom: 8px;
@@ -488,73 +588,34 @@ img {
     color: #f85149;
 }
 
-/* Steps */
-.step {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    padding: 24px;
-    margin: 24px 0;
+.info {
+    background: #1a2332;
+    border-left-color: #58a6ff;
 }
 
-.step-number {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    background: #1f6feb;
-    color: #fff;
-    border-radius: 50%;
+/* Coming Soon / Placeholder */
+.coming-soon {
     text-align: center;
-    line-height: 32px;
-    font-weight: 600;
-    margin-right: 12px;
-    font-size: 14px;
-}
-
-.step h3 {
-    display: inline-block;
-    margin: 0 0 16px 0;
-    font-size: 20px;
-}
-
-/* Tool Cards */
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    margin: 24px 0;
-}
-
-.tool-card {
+    padding: 80px 32px;
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 8px;
-    padding: 24px;
-    transition: all 0.2s;
+    margin: 40px 0;
 }
 
-.tool-card:hover {
-    border-color: #58a6ff;
-    transform: translateY(-2px);
-}
-
-.tool-card h3 {
-    font-size: 20px;
-    margin: 0;
-}
-
-.tool-card p {
+.coming-soon h2 {
+    font-size: 32px;
     color: #8b949e;
     margin-bottom: 16px;
+    border: none;
+    padding: 0;
 }
 
-.tool-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #58a6ff;
-    font-size: 14px;
-    font-weight: 500;
+.coming-soon p {
+    font-size: 18px;
+    color: #6e7681;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* Footer */
@@ -569,6 +630,10 @@ img {
 
 .footer a {
     color: #8b949e;
+}
+
+.footer a:hover {
+    color: #58a6ff;
 }
 
 /* Responsive */
@@ -593,7 +658,16 @@ img {
         flex-direction: column;
     }
 
-    .features-grid, .lab-grid, .tools-grid {
+    .about-grid {
         grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .lab-grid, .tools-grid, .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-section {
+        padding: 24px;
     }
 }

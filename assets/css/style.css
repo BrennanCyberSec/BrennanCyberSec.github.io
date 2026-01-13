@@ -641,6 +641,14 @@ main {
 /* ============================================
    LAB CARDS
    ============================================ */
+/* Make lab cards clickable */
+.lab-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+}
+
 .lab-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border-primary);

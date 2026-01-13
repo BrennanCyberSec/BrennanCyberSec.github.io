@@ -98,7 +98,7 @@ main {
     border-bottom: 1px solid var(--border-primary);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 }
 
 .header-content {
@@ -176,6 +176,8 @@ main {
     padding: 8px;
     border-radius: var(--radius-md);
     transition: background 0.2s;
+    position: relative;
+    z-index: 1001;
 }
 
 .nav-toggle:hover {

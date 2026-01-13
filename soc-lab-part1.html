@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Automation Lab - Part 1 | Brennan Vigna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111820;
+            --bg-tertiary: #1a2130;
+            --terminal-green: #00ff9d;
+            --terminal-green-dim: #00cc7d;
+            --terminal-blue: #00d4ff;
+            --terminal-purple: #b366ff;
+            --terminal-orange: #ff9d00;
+            --terminal-red: #ff4757;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --border-color: #21262d;
+            --glow-green: 0 0 20px rgba(0, 255, 157, 0.3);
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Scanline effect overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bg-primary);
+        }
+
+        .nav-logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--terminal-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 20, 0.98);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--terminal-green);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-tertiary);
+            z-index: 998;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--terminal-green), var(--terminal-blue));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-green);
+        }
+
+        /* Section Navigation */
+        .section-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-nav-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section-nav-dot:hover,
+        .section-nav-dot.active {
+            border-color: var(--terminal-green);
+            background: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .section-nav-dot::before {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-nav-dot:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1024px) {
+            .section-nav {
+                display: none;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Grid background */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--terminal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-terminal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: typeIn 0.5s ease forwards;
+        }
+
+        .terminal-line:nth-child(2) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(3) { animation-delay: 0.4s; }
+        .terminal-line:nth-child(4) { animation-delay: 0.6s; }
+        .terminal-line:nth-child(5) { animation-delay: 0.8s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .terminal-prompt {
+            color: var(--terminal-green);
+        }
+
+        .terminal-command {
+            color: var(--terminal-blue);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tool-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: var(--terminal-green);
+            transform: translateY(-2px);
+            box-shadow: var(--glow-green);
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .tool-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .section-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-number::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--terminal-green);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-copy {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy:hover {
+            border-color: var(--terminal-green);
+            color: var(--terminal-green);
+        }
+
+        .code-content {
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .code-content .comment { color: var(--text-muted); }
+        .code-content .command { color: var(--terminal-blue); }
+        .code-content .flag { color: var(--terminal-orange); }
+        .code-content .string { color: var(--terminal-green); }
+        .code-content .url { color: var(--terminal-purple); }
+
+        /* Screenshot images */
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 1.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .screenshot:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--terminal-green);
+        }
+
+        /* Success/Info boxes */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-box.success {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 157, 0, 0.1);
+            border-color: rgba(255, 157, 0, 0.3);
+        }
+
+        .info-box-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Specs Table */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .specs-table th {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .specs-table td {
+            color: var(--text-secondary);
+        }
+
+        .specs-table tr:hover td {
+            background: rgba(0, 255, 157, 0.02);
+        }
+
+        /* Recap Section */
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recap-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .recap-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 255, 157, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terminal-green);
+            flex-shrink: 0;
+        }
+
+        .recap-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Navigation Footer */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .nav-btn-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-btn-title {
+            font-weight: 500;
+        }
+
+        .nav-btn.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-text a {
+            color: var(--terminal-green);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terminal-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">BV</div>
+            <span class="nav-logo-text">Brennan Vigna</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="labs.html">Labs</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="labs.html">Labs</a>
+        <a href="tools.html">Tools</a>
+        <a href="resume.html">Resume</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="section-nav">
+        <div class="section-nav-dot active" data-label="Overview" data-section="hero"></div>
+        <div class="section-nav-dot" data-label="Sysmon Setup" data-section="sysmon"></div>
+        <div class="section-nav-dot" data-label="Cloud VMs" data-section="cloud"></div>
+        <div class="section-nav-dot" data-label="Wazuh Install" data-section="wazuh"></div>
+        <div class="section-nav-dot" data-label="TheHive Setup" data-section="thehive"></div>
+        <div class="section-nav-dot" data-label="Recap" data-section="recap"></div>
+    </div>
+
+    <!-- Lightbox for images -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged screenshot" id="lightbox-img">
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Part 1 of 4</div>
+            <h1 class="hero-title">
+                <span class="highlight">SOC Automation</span> Lab
+            </h1>
+            <p class="hero-subtitle">
+                Building a Security Operations Center automation environment from scratch using Sysmon, Wazuh, and TheHive.
+            </p>
+
+            <div class="hero-terminal">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">~/soc-lab $</span> 
+                    <span class="terminal-command">cat objectives.txt</span>
+                </div>
+                <div class="terminal-line terminal-output">→ Install Sysmon on Windows 10 VM</div>
+                <div class="terminal-line terminal-output">→ Deploy Wazuh SIEM in the cloud</div>
+                <div class="terminal-line terminal-output">→ Configure TheHive for case management</div>
+                <div class="terminal-line terminal-output">→ Set up Elasticsearch for indexing</div>
+            </div>
+
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">🖥️</div>
+                    <div class="tool-name">VMware</div>
+                    <div class="tool-desc">Hypervisor</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">🪟</div>
+                    <div class="tool-name">Windows 10</div>
+                    <div class="tool-desc">Target VM</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">📊</div>
+                    <div class="tool-name">Sysmon</div>
+                    <div class="tool-desc">Logging</div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">🛡️</div>
+                    <div class="tool-name">Wazuh</div>
+                    <div class="tool-desc">SIEM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Sysmon Installation -->
+    <section class="section" id="sysmon">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">01 // SYSMON SETUP</div>
+                <h2 class="section-title">Installing Sysmon on Windows 10</h2>
+                <p class="section-desc">Configure advanced system monitoring to capture detailed security events.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📁</div>
+                    <div>
+                        <h3 class="step-title">Navigate to Installation Directory</h3>
+                        <p class="step-subtitle">Prepare the environment for Sysmon installation</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>First, ensure you're in the correct directory where Sysmon files are located. The sysmon configuration file should already be downloaded.</p>
+                    
+                    <img src="images/image1.png" alt="Sysmon directory in PowerShell" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Sysmon directory in PowerShell</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">⚡</div>
+                    <div>
+                        <h3 class="step-title">Execute Sysmon Installation</h3>
+                        <p class="step-subtitle">Install with custom configuration file</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Run the installation command with the <code>-i</code> flag for installation, pointing to your sysmon configuration file.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">PowerShell</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">.\Sysmon64.exe</span> <span class="flag">-i</span> <span class="string">.\sysmonconfig.xml</span></code>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            After pressing enter and accepting the license agreement, Sysmon will be installed on your Windows 10 VM.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔍</div>
+                    <div>
+                        <h3 class="step-title">Verify Installation in Event Viewer</h3>
+                        <p class="step-subtitle">Confirm Sysmon is logging events</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Open Event Viewer and navigate to the Sysmon logs to verify successful installation.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Navigation Path</span>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="string">Applications and Services</span> → <span class="string">Microsoft</span> → <span class="string">Windows</span> → <span class="string">Sysmon</span> → <span class="string">Operational</span></code>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            If you see logs populating in the Operational folder, Sysmon is successfully capturing events!
+                        </div>
+                    </div>
+
+                    <img src="images/image2.png" alt="Event Viewer showing Sysmon logs" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Event Viewer showing Sysmon Operational logs</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📷</div>
+                    <div>
+                        <h3 class="step-title">Create VM Snapshot</h3>
+                        <p class="step-subtitle">Save a restore point before proceeding</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Take a snapshot of your Windows 10 VM in its current state. This allows you to revert if anything goes wrong in future steps.</p>
+                    
+                    <img src="images/image3.png" alt="VM Snapshot creation" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Creating a VM snapshot in VMware</p>
+
+                    <div class="info-box warning">
+                        <div class="info-box-icon">⚠️</div>
+                        <div class="info-box-content">
+                            Always create snapshots before major configuration changes. It's a critical safety practice in lab environments.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Cloud VM Setup -->
+    <section class="section" id="cloud">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">02 // CLOUD INFRASTRUCTURE</div>
+                <h2 class="section-title">Deploying Cloud Virtual Machines</h2>
+                <p class="section-desc">Setting up Ubuntu servers on Vultr for Wazuh and TheHive.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">☁️</div>
+                    <div>
+                        <h3 class="step-title">Wazuh Server Configuration</h3>
+                        <p class="step-subtitle">Ubuntu server for SIEM deployment</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Create a shared CPU instance on Vultr. I'll be using a shared CPU configuration for the Wazuh server:</p>
+                    
+                    <img src="images/image4.png" alt="Vultr shared CPU selection" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Selecting shared CPU in Vultr</p>
+
+                    <img src="images/image5.png" alt="Wazuh server specs" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Wazuh server specifications</p>
+
+                    <img src="images/image6.png" alt="Wazuh VM configuration" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Additional Wazuh VM configuration</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🐝</div>
+                    <div>
+                        <h3 class="step-title">TheHive Server Configuration</h3>
+                        <p class="step-subtitle">Ubuntu server for case management</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Create a second VM for TheHive with appropriate resources for running Cassandra and Elasticsearch:</p>
+
+                    <img src="images/image7.png" alt="TheHive VM specs" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// TheHive server specifications</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🎮</div>
+                    <div>
+                        <h3 class="step-title">VMs Running in the Cloud</h3>
+                        <p class="step-subtitle">Both servers are up and ready</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Both VMs are now running in the cloud. I named them after my current favorite game, Marvel Rivals!</p>
+
+                    <img src="images/image8.png" alt="Both VMs running in Vultr" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Marvel Rivals themed VMs running in Vultr dashboard</p>
+
+                    <div class="info-box">
+                        <div class="info-box-icon">💡</div>
+                        <div class="info-box-content">
+                            Pro tip: Name your VMs something memorable! It makes managing multiple instances much easier.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Wazuh Installation -->
+    <section class="section" id="wazuh">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">03 // WAZUH DEPLOYMENT</div>
+                <h2 class="section-title">Installing Wazuh SIEM</h2>
+                <p class="section-desc">Deploy and configure the Wazuh security monitoring platform.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔌</div>
+                    <div>
+                        <h3 class="step-title">SSH into Wazuh Server</h3>
+                        <p class="step-subtitle">Connect to the cloud instance</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Connect to your Wazuh server from your local machine using SSH through PowerShell:</p>
+                    
+                    <img src="images/image9.png" alt="SSH connection to Wazuh server" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// SSH connection established to Wazuh server</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔄</div>
+                    <div>
+                        <h3 class="step-title">Update System Packages</h3>
+                        <p class="step-subtitle">Ensure all packages are current</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Since we're logged in as root, we don't need sudo. Run the update commands:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">apt-get update</span> && <span class="command">apt-get upgrade</span> <span class="flag">-y</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/image10.png" alt="Package update in progress" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// System packages updating</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📦</div>
+                    <div>
+                        <h3 class="step-title">Install Wazuh</h3>
+                        <p class="step-subtitle">Run the official installation script</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Use the official Wazuh installation script for a streamlined deployment:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">curl</span> <span class="flag">-sO</span> <span class="url">https://packages.wazuh.com/4.14/wazuh-install.sh</span> && <span class="command">sudo bash</span> <span class="string">./wazuh-install.sh</span> <span class="flag">-a</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/image11.png" alt="Wazuh installation in progress" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Wazuh installation script running</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔧</div>
+                    <div>
+                        <h3 class="step-title">Troubleshooting Connection Issues</h3>
+                        <p class="step-subtitle">Resolving firewall and access problems</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Oh no! Trying to access our Wazuh server on my local machine via public IP can't be reached! Let's troubleshoot. I remember during the installation Wazuh warned to allow certain ports on ufw.</p>
+                    
+                    <img src="images/image12.png" alt="Connection issue" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Unable to reach Wazuh web interface</p>
+
+                    <p>Let's check Vultr and see if there are any firewall settings on the Wazuh server:</p>
+
+                    <img src="images/image13.png" alt="Vultr firewall check" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Checking Vultr firewall settings</p>
+
+                    <p>The wazuh-manager.service is actively running, so that's good:</p>
+
+                    <img src="images/image14.png" alt="Wazuh service status" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// wazuh-manager.service is active</p>
+
+                    <p>Let's add a rule to our firewall on Wazuh:</p>
+
+                    <img src="images/image15.png" alt="Adding firewall rule" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Adding firewall rule for Wazuh</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            After adding the firewall rule and refreshing the page, it worked! The Wazuh web interface is now accessible.
+                        </div>
+                    </div>
+
+                    <img src="images/image16.png" alt="Wazuh login page" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Wazuh login page accessible</p>
+
+                    <img src="images/image17.png" alt="Wazuh dashboard" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Successfully logged into Wazuh dashboard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: TheHive Installation -->
+    <section class="section" id="thehive">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">04 // THEHIVE SETUP</div>
+                <h2 class="section-title">Installing TheHive & Dependencies</h2>
+                <p class="section-desc">Deploy TheHive case management platform with all required components.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📋</div>
+                    <div>
+                        <h3 class="step-title">Install Prerequisites</h3>
+                        <p class="step-subtitle">Required packages and dependencies</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>First, install all necessary dependencies for TheHive on our MarvelRivals-TheHive machine:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">sudo apt update</span>
+<span class="command">sudo apt install</span> <span class="string">wget curl gnupg coreutils apt-transport-https git ca-certificates ca-certificates-java software-properties-common python3-pip lsb-release unzip</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">☕</div>
+                    <div>
+                        <h3 class="step-title">Install Java Virtual Machine</h3>
+                        <p class="step-subtitle">Required for TheHive's application server</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>TheHive requires Java to run its application server and to manage various processes. Install Amazon Corretto JDK:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment"># Add Corretto repository</span>
+<span class="command">wget</span> <span class="flag">-qO-</span> <span class="url">https://apt.corretto.aws/corretto.key</span> | <span class="command">sudo gpg</span> <span class="flag">--dearmor</span> <span class="flag">-o</span> <span class="string">/usr/share/keyrings/corretto.gpg</span>
+
+<span class="command">echo</span> <span class="string">"deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main"</span> | <span class="command">sudo tee</span> <span class="flag">-a</span> <span class="string">/etc/apt/sources.list.d/corretto.sources.list</span>
+
+<span class="comment"># Install Java 11</span>
+<span class="command">sudo apt update</span>
+<span class="command">sudo apt install</span> <span class="string">java-common java-11-amazon-corretto-jdk</span>
+
+<span class="comment"># Set JAVA_HOME</span>
+<span class="command">echo</span> <span class="string">JAVA_HOME="/usr/lib/jvm/java-11-amazon-corretto"</span> | <span class="command">sudo tee</span> <span class="flag">-a</span> <span class="string">/etc/environment</span>
+<span class="command">export</span> <span class="string">JAVA_HOME="/usr/lib/jvm/java-11-amazon-corretto"</span></code>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Java VM successfully installed!
+                        </div>
+                    </div>
+
+                    <img src="images/image18.png" alt="Java installation confirmed" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Java installation verified</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🗄️</div>
+                    <div>
+                        <h3 class="step-title">Install Apache Cassandra</h3>
+                        <p class="step-subtitle">Database for incident response data</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Cassandra is a database system used in TheHive as the back-end database for storing and managing incident response data.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment"># Add Cassandra repository</span>
+<span class="command">curl</span> <span class="flag">-fsSL</span> <span class="url">https://www.apache.org/dist/cassandra/KEYS</span> | <span class="command">sudo gpg</span> <span class="flag">--dearmor</span> <span class="flag">-o</span> <span class="string">/usr/share/keyrings/cassandra-archive.gpg</span>
+
+<span class="command">echo</span> <span class="string">"deb [signed-by=/usr/share/keyrings/cassandra-archive.gpg] https://debian.cassandra.apache.org 41x main"</span> | <span class="command">sudo tee</span> <span class="flag">-a</span> <span class="string">/etc/apt/sources.list.d/cassandra.sources.list</span>
+
+<span class="comment"># Install Cassandra</span>
+<span class="command">sudo apt update</span>
+<span class="command">sudo apt install</span> <span class="string">cassandra</span>
+
+<span class="comment"># Verify status</span>
+<span class="command">systemctl status</span> <span class="string">cassandra</span></code>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Cassandra is running successfully!
+                        </div>
+                    </div>
+
+                    <img src="images/image19.png" alt="Cassandra service status" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Cassandra service is active and running</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔎</div>
+                    <div>
+                        <h3 class="step-title">Install Elasticsearch</h3>
+                        <p class="step-subtitle">Data indexing and search engine</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Elasticsearch is a data indexing and search engine that's used in TheHive to manage data indices. Starting with version 5.5, it can also replace Apache Cassandra (JanusGraph) for storing audit logs.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment"># Add Elasticsearch repository</span>
+<span class="command">wget</span> <span class="flag">-qO -</span> <span class="url">https://artifacts.elastic.co/GPG-KEY-elasticsearch</span> | <span class="command">sudo gpg</span> <span class="flag">--dearmor</span> <span class="flag">-o</span> <span class="string">/usr/share/keyrings/elasticsearch-keyring.gpg</span>
+
+<span class="command">sudo apt-get install</span> <span class="string">apt-transport-https</span>
+
+<span class="command">echo</span> <span class="string">"deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"</span> | <span class="command">sudo tee</span> <span class="string">/etc/apt/sources.list.d/elastic-8.x.list</span>
+
+<span class="comment"># Install Elasticsearch</span>
+<span class="command">sudo apt update</span>
+<span class="command">sudo apt install</span> <span class="string">elasticsearch</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/image20.png" alt="Elasticsearch installation" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Elasticsearch installation complete</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🐝</div>
+                    <div>
+                        <h3 class="step-title">Install TheHive</h3>
+                        <p class="step-subtitle">The main case management platform</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Download and install TheHive package:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment"># Download TheHive package</span>
+<span class="command">wget</span> <span class="flag">-O</span> <span class="string">/tmp/thehive_5.5.13-1_all.deb</span> <span class="url">https://thehive.download.strangebee.com/5.5/deb/thehive_5.5.13-1_all.deb</span>
+
+<span class="comment"># Download checksums (optional but recommended)</span>
+<span class="command">wget</span> <span class="flag">-O</span> <span class="string">/tmp/thehive_5.5.13-1_all.deb.sha256</span> <span class="url">https://thehive.download.strangebee.com/5.5/sha256/thehive_5.5.13-1_all.deb.sha256</span>
+
+<span class="command">wget</span> <span class="flag">-O</span> <span class="string">/tmp/thehive_5.5.13-1_all.deb.asc</span> <span class="url">https://thehive.download.strangebee.com/5.5/asc/thehive_5.5.13-1_all.deb.asc</span>
+
+<span class="comment"># Install TheHive</span>
+<span class="command">sudo apt-get install</span> <span class="string">/tmp/thehive_5.5.13-1_all.deb</span></code>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            TheHive has been successfully installed!
+                        </div>
+                    </div>
+
+                    <img src="images/image21.png" alt="TheHive installation complete" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// TheHive installation complete</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Recap -->
+    <section class="section" id="recap">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">05 // RECAP</div>
+                <h2 class="section-title">What We Accomplished</h2>
+                <p class="section-desc">Summary of Part 1 achievements and what's coming next.</p>
+            </div>
+
+            <div class="recap-grid fade-in">
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Created a Windows 10 VM with Sysmon logging configured</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Downloaded and installed Sysmon with custom config file</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Deployed two cloud VMs on Vultr for security infrastructure</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Installed and configured Wazuh SIEM platform</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Set up Apache Cassandra and Elasticsearch</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Deployed TheHive case management platform</div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in" style="margin-top: 3rem;">
+                <div class="step-header">
+                    <div class="step-icon">🚀</div>
+                    <div>
+                        <h3 class="step-title">Up Next: Part 2</h3>
+                        <p class="step-subtitle">Configuration and integration</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In the next part of this series, we'll configure all the components we've installed to work together. This includes connecting Wazuh agents, configuring TheHive, and setting up the automation workflows.</p>
+                    
+                    <div class="info-box">
+                        <div class="info-box-icon">📚</div>
+                        <div class="info-box-content">
+                            Stay tuned for Part 2 where we bring everything together and configure them to our needs!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <div class="nav-footer">
+        <a href="labs.html" class="nav-btn">
+            <span>←</span>
+            <div>
+                <div class="nav-btn-label">Previous</div>
+                <div class="nav-btn-title">All Labs</div>
+            </div>
+        </a>
+        <a href="soc-lab-part2.html" class="nav-btn">
+            <div>
+                <div class="nav-btn-label">Next</div>
+                <div class="nav-btn-title">Part 2: Configuration</div>
+            </div>
+            <span>→</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            Brennan Vigna © 2025 · <a href="index.html">Cybersecurity Student & IT Professional</a>
+        </p>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle - FIXED
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close mobile menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Section Navigation
+        const sections = ['hero', 'sysmon', 'cloud', 'wazuh', 'thehive', 'recap'];
+        const navDots = document.querySelectorAll('.section-nav-dot');
+
+        // Click handlers for nav dots
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const sectionId = dot.getAttribute('data-section');
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Update active dot on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        navDots.forEach(dot => dot.classList.remove('active'));
+                        navDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Fade-in animations on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.color = 'var(--terminal-green)';
+                button.style.borderColor = 'var(--terminal-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                    button.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

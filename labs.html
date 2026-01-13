@@ -46,93 +46,23 @@
 
         <div class="container">
             <div class="content-wide">
-                
-                <!-- Filter Tags -->
-                <div class="filter-section">
-                    <span class="filter-label">Filter by category:</span>
-                    <div class="filter-tags">
-                        <button class="filter-tag active" data-filter="all">All</button>
-                        <button class="filter-tag" data-filter="detection">Detection Engineering</button>
-                        <button class="filter-tag" data-filter="threat-hunting">Threat Hunting</button>
-                        <button class="filter-tag" data-filter="incident-response">Incident Response</button>
-                        <button class="filter-tag" data-filter="malware">Malware Analysis</button>
-                    </div>
-                </div>
 
                 <!-- Labs Grid -->
                 <div class="lab-grid">
                     
-                    <!-- Placeholder Lab Cards - Replace with your actual labs -->
+                    <!-- SOC Automation Lab - Part 1 -->
                     <article class="lab-card" data-category="detection">
-                        <div class="lab-header">
-                            <h3>Sysmon Detection Rules</h3>
-                            <span class="lab-badge blue">Detection</span>
-                        </div>
-                        <p>Implementing and testing Sysmon configurations for detecting common attack techniques including process injection, credential dumping, and persistence mechanisms.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">Sysmon · ELK Stack · Sigma</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
-                    </article>
-
-                    <article class="lab-card" data-category="threat-hunting">
-                        <div class="lab-header">
-                            <h3>Network Traffic Analysis</h3>
-                            <span class="lab-badge purple">Threat Hunting</span>
-                        </div>
-                        <p>Analyzing PCAP files to identify malicious network patterns, C2 communications, and data exfiltration attempts using Wireshark and Zeek.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">Wireshark · Zeek · Suricata</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
-                    </article>
-
-                    <article class="lab-card" data-category="incident-response">
-                        <div class="lab-header">
-                            <h3>Phishing Investigation</h3>
-                            <span class="lab-badge green">Incident Response</span>
-                        </div>
-                        <p>End-to-end investigation of a phishing campaign including email header analysis, payload examination, and indicator extraction.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">Email Headers · VirusTotal · URLScan</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
-                    </article>
-
-                    <article class="lab-card" data-category="malware">
-                        <div class="lab-header">
-                            <h3>Malware Behavior Analysis</h3>
-                            <span class="lab-badge red">Malware Analysis</span>
-                        </div>
-                        <p>Dynamic analysis of malware samples in an isolated environment, documenting behaviors, network indicators, and detection opportunities.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">FlareVM · Process Monitor · Any.Run</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
-                    </article>
-
-                    <article class="lab-card" data-category="detection">
-                        <div class="lab-header">
-                            <h3>SIEM Rule Development</h3>
-                            <span class="lab-badge blue">Detection</span>
-                        </div>
-                        <p>Creating and tuning detection rules in ELK and Splunk for identifying suspicious activities across Windows endpoints.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">Elasticsearch · Splunk · KQL</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
-                    </article>
-
-                    <article class="lab-card" data-category="threat-hunting">
-                        <div class="lab-header">
-                            <h3>Active Directory Attacks</h3>
-                            <span class="lab-badge purple">Threat Hunting</span>
-                        </div>
-                        <p>Simulating and detecting common AD attack patterns including Kerberoasting, Pass-the-Hash, and DCSync attacks.</p>
-                        <div class="lab-meta">
-                            <span class="lab-tools">Mimikatz · BloodHound · Windows Events</span>
-                        </div>
-                        <span class="lab-date">Coming Soon</span>
+                        <a href="soc-lab-part1.html" class="lab-card-link">
+                            <div class="lab-header">
+                                <h3>SOC Automation Lab - Part 1</h3>
+                                <span class="lab-badge blue">Detection</span>
+                            </div>
+                            <p>Building a SOC automation environment from scratch. Installing Sysmon on Windows 10, deploying Wazuh SIEM and TheHive in the cloud with Elasticsearch and Cassandra.</p>
+                            <div class="lab-meta">
+                                <span class="lab-tools">Sysmon · Wazuh · TheHive · Elasticsearch</span>
+                            </div>
+                            <span class="lab-date">January 2025</span>
+                        </a>
                     </article>
 
                 </div>

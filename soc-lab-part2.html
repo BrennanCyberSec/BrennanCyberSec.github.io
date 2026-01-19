@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOC Automation Lab - Part 2 | Brennan Vigna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111820;
+            --bg-tertiary: #1a2130;
+            --terminal-green: #00ff9d;
+            --terminal-green-dim: #00cc7d;
+            --terminal-blue: #00d4ff;
+            --terminal-purple: #b366ff;
+            --terminal-orange: #ff9d00;
+            --terminal-red: #ff4757;
+            --text-primary: #e6edf3;
+            --text-secondary: #a8b2bd;
+            --text-muted: #6e7a88;
+            --border-color: #21262d;
+            --glow-green: 0 0 20px rgba(0, 255, 157, 0.3);
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Scanline effect overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bg-primary);
+        }
+
+        .nav-logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--terminal-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 20, 0.98);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--terminal-green);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-tertiary);
+            z-index: 998;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--terminal-green), var(--terminal-blue));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-green);
+        }
+
+        /* Section Navigation */
+        .section-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-nav-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section-nav-dot:hover,
+        .section-nav-dot.active {
+            border-color: var(--terminal-green);
+            background: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .section-nav-dot::before {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-nav-dot:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1024px) {
+            .section-nav {
+                display: none;
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--terminal-green);
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .scroll-top:hover svg {
+            stroke: var(--bg-primary);
+        }
+
+        .scroll-top svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--terminal-green);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--terminal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .section-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-number::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--terminal-green);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-copy {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy:hover {
+            border-color: var(--terminal-green);
+            color: var(--terminal-green);
+        }
+
+        .code-content {
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .code-content .comment { color: var(--text-muted); }
+        .code-content .command { color: var(--terminal-blue); }
+        .code-content .flag { color: var(--terminal-orange); }
+        .code-content .string { color: var(--terminal-green); }
+        .code-content .path { color: var(--terminal-purple); }
+
+        /* Screenshot images */
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 1.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .screenshot:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--terminal-green);
+        }
+
+        /* Success/Info/Warning boxes */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-box.success {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 157, 0, 0.1);
+            border-color: rgba(255, 157, 0, 0.3);
+        }
+
+        .info-box.error {
+            background: rgba(255, 71, 87, 0.1);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .info-box-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .info-box-content strong {
+            color: var(--text-primary);
+        }
+
+        /* Troubleshooting Section */
+        .troubleshoot-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--terminal-red);
+            border-left: 4px solid var(--terminal-red);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .troubleshoot-box h4 {
+            color: var(--terminal-red);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .troubleshoot-box .problem,
+        .troubleshoot-box .cause,
+        .troubleshoot-box .solution,
+        .troubleshoot-box .lesson {
+            margin-bottom: 1rem;
+        }
+
+        .troubleshoot-box .label {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .troubleshoot-box ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .troubleshoot-box li {
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .troubleshoot-box .lesson {
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .troubleshoot-box .lesson .label {
+            color: var(--terminal-green);
+        }
+
+        /* Recap Section */
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recap-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .recap-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 255, 157, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terminal-green);
+            flex-shrink: 0;
+        }
+
+        .recap-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Navigation Footer */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .nav-btn-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-btn-title {
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-text a {
+            color: var(--terminal-green);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terminal-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">BV</div>
+            <span class="nav-logo-text">Brennan Vigna</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="labs.html">Labs</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="labs.html">Labs</a>
+        <a href="tools.html">Tools</a>
+        <a href="resume.html">Resume</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="section-nav">
+        <div class="section-nav-dot active" data-label="Overview" data-section="hero"></div>
+        <div class="section-nav-dot" data-label="Cassandra" data-section="cassandra"></div>
+        <div class="section-nav-dot" data-label="Elasticsearch" data-section="elasticsearch"></div>
+        <div class="section-nav-dot" data-label="TheHive" data-section="thehive"></div>
+        <div class="section-nav-dot" data-label="Wazuh Agent" data-section="wazuh"></div>
+        <div class="section-nav-dot" data-label="Recap" data-section="recap"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Lightbox for images -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged screenshot" id="lightbox-img">
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Part 2 of 4</div>
+            <h1 class="hero-title">
+                <span class="highlight">Configuring</span> TheHive & Wazuh
+            </h1>
+            <p class="hero-subtitle">
+                Setting up Cassandra, Elasticsearch, TheHive, and connecting the Wazuh agent to start collecting telemetry.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1: Cassandra Configuration -->
+    <section class="section" id="cassandra">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">01 // CASSANDRA CONFIG</div>
+                <h2 class="section-title">Configuring Apache Cassandra</h2>
+                <p class="section-desc">Setting up the database backend for TheHive.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔌</div>
+                    <div>
+                        <h3 class="step-title">SSH into TheHive Server</h3>
+                        <p class="step-subtitle">Connect and begin configuration</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>SSH from your local machine into your TheHive server via PowerShell. Once connected, we'll edit the Cassandra configuration file to meet our specifications.</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <h3 class="step-title">Edit Cassandra Configuration</h3>
+                        <p class="step-subtitle">Set cluster name and network settings</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Change the cluster name to whatever you like. I chose the name <strong>Magneto</strong>.</p>
+                    
+                    <img src="images/part2/image1.png" alt="Editing Cassandra config" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Editing cassandra.yaml configuration</p>
+
+                    <img src="images/part2/image2.png" alt="Cluster name setting" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Setting the cluster name to Magneto</p>
+
+                    <img src="images/part2/image3.png" alt="Additional config" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Additional Cassandra configuration</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🌐</div>
+                    <div>
+                        <h3 class="step-title">Set Network Addresses</h3>
+                        <p class="step-subtitle">Configure listen and RPC addresses</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Insert your TheHive server's public IP address for the listen_address:</p>
+                    
+                    <img src="images/part2/image4.png" alt="Setting listen address" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Setting the listen_address to public IP</p>
+
+                    <p>Do the same for the rpc_address:</p>
+
+                    <img src="images/part2/image5.png" alt="Setting RPC address" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Setting the rpc_address</p>
+
+                    <img src="images/part2/image6.png" alt="Seeds configuration" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Seed provider configuration</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔄</div>
+                    <div>
+                        <h3 class="step-title">Restart Cassandra Service</h3>
+                        <p class="step-subtitle">Apply changes and verify status</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Stop Cassandra, clear the old data files, then restart:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment"># Stop Cassandra</span>
+<span class="command">systemctl stop</span> <span class="string">cassandra.service</span>
+
+<span class="comment"># Remove old data files</span>
+<span class="command">rm</span> <span class="flag">-rf</span> <span class="path">/var/lib/cassandra/*</span>
+
+<span class="comment"># Start and verify</span>
+<span class="command">systemctl start</span> <span class="string">cassandra.service</span>
+<span class="command">systemctl status</span> <span class="string">cassandra.service</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/part2/image7.png" alt="Cassandra running" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Cassandra service is active and running</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Cassandra is running successfully with our custom configuration.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Elasticsearch Configuration -->
+    <section class="section" id="elasticsearch">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">02 // ELASTICSEARCH CONFIG</div>
+                <h2 class="section-title">Configuring Elasticsearch</h2>
+                <p class="section-desc">Setting up the search and indexing engine with troubleshooting.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <h3 class="step-title">Edit Elasticsearch Configuration</h3>
+                        <p class="step-subtitle">Modify the elasticsearch.yml file</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Edit the .yml file to change the network.host, cluster name, and leave the node name as default:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">nano</span> <span class="path">/etc/elasticsearch/elasticsearch.yml</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/part2/image8.png" alt="Editing elasticsearch.yml" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Editing elasticsearch.yml configuration</p>
+
+                    <img src="images/part2/image9.png" alt="Elasticsearch settings" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Network and cluster settings</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">⚠️</div>
+                    <div>
+                        <h3 class="step-title">Troubleshooting: Elasticsearch Failure</h3>
+                        <p class="step-subtitle">Diagnosing and fixing startup errors</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I ran into a big problem - Elasticsearch was failing to start. Let's troubleshoot.</p>
+                    
+                    <img src="images/part2/image10.png" alt="Elasticsearch failure" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Elasticsearch startup failure</p>
+
+                    <div class="troubleshoot-box">
+                        <h4>🔧 Elasticsearch Startup Failure - Summary</h4>
+                        
+                        <div class="problem">
+                            <span class="label">Problem:</span>
+                            <p>After editing elasticsearch.yml to uncomment and set network.host, http.port, cluster.name, and node.name, Elasticsearch failed to start with <code>status=70/SOFTWARE</code> error.</p>
+                        </div>
+
+                        <div class="cause">
+                            <span class="label">Root Causes:</span>
+                            <ul>
+                                <li><strong>Missing discovery setting</strong> - Setting network.host to an actual IP (instead of localhost) triggers Elasticsearch's production mode, which requires explicit discovery configuration.</li>
+                                <li><strong>Duplicate/conflicting entries</strong> - The config file had multiple duplicate lines appended to the bottom:
+                                    <ul>
+                                        <li>Two cluster.initial_master_nodes entries with different values</li>
+                                        <li>Two discovery.type: single-node entries</li>
+                                        <li>Conflicting http.host: 0.0.0.0</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="solution">
+                            <span class="label">Solution:</span>
+                            <ul>
+                                <li>Removed all cluster.initial_master_nodes lines</li>
+                                <li>Removed http.host: 0.0.0.0</li>
+                                <li>Kept a single discovery.type: single-node entry</li>
+                            </ul>
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">Commands to Fix</span>
+                                <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="command">sed</span> <span class="flag">-i</span> <span class="string">'/cluster.initial_master_nodes/d'</span> <span class="path">/etc/elasticsearch/elasticsearch.yml</span>
+<span class="command">sed</span> <span class="flag">-i</span> <span class="string">'/http.host: 0.0.0.0/d'</span> <span class="path">/etc/elasticsearch/elasticsearch.yml</span></code>
+                            </div>
+                        </div>
+
+                        <div class="lesson">
+                            <span class="label">Lesson Learned:</span>
+                            <p>When editing YAML configs, edit existing lines in place rather than appending new lines to the bottom, which can create duplicates that cause parse errors.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: TheHive Configuration -->
+    <section class="section" id="thehive">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">03 // THEHIVE CONFIG</div>
+                <h2 class="section-title">Configuring TheHive</h2>
+                <p class="section-desc">Setting up permissions and accessing the web interface.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔐</div>
+                    <div>
+                        <h3 class="step-title">Set Directory Permissions</h3>
+                        <p class="step-subtitle">Configure ownership for /opt/thp</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>First we need to change some permissions for the TheHive directory:</p>
+                    
+                    <img src="images/part2/image11.png" alt="Setting permissions" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Configuring TheHive directory permissions</p>
+
+                    <img src="images/part2/image12.png" alt="Permission changes" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Additional permission settings</p>
+
+                    <img src="images/part2/image13.png" alt="TheHive config" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// TheHive application configuration</p>
+
+                    <img src="images/part2/image14.png" alt="More config settings" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Additional TheHive settings</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🌐</div>
+                    <div>
+                        <h3 class="step-title">Allow Port 9000</h3>
+                        <p class="step-subtitle">Open firewall for web access</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Now that the configs are changed, it's time to open TheHive in a browser. But first we need to allow port 9000 on TheHive machine:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">ufw allow</span> <span class="string">9000</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/part2/image15.png" alt="Allowing port 9000" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Opening port 9000 in UFW firewall</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">✅</div>
+                    <div>
+                        <h3 class="step-title">Access TheHive Web Interface</h3>
+                        <p class="step-subtitle">Login and explore the dashboard</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Navigate to <code>http://[YOUR_THEHIVE_IP]:9000</code> in your browser:</p>
+                    
+                    <img src="images/part2/image16.png" alt="TheHive login page" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// We're in! TheHive login page</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            TheHive web interface is accessible and ready for login.
+                        </div>
+                    </div>
+
+                    <p>After logging in, this is what we see:</p>
+
+                    <img src="images/part2/image17.png" alt="TheHive dashboard" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// TheHive dashboard after login</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Wazuh Agent Configuration -->
+    <section class="section" id="wazuh">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">04 // WAZUH AGENT</div>
+                <h2 class="section-title">Connecting the Wazuh Agent</h2>
+                <p class="section-desc">Deploying the agent on Windows 10 and connecting to Wazuh manager.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🖥️</div>
+                    <div>
+                        <h3 class="step-title">Deploy New Agent from Wazuh</h3>
+                        <p class="step-subtitle">Get the agent installer from Wazuh dashboard</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Now that TheHive is configured, it's time to configure Wazuh and get our Windows 10 agent to call into Wazuh so we can start generating telemetry.</p>
+                    
+                    <p>First, head to your Windows 10 VM and log into Wazuh. Back on the Wazuh dashboard, click on <strong>Deploy new agent</strong>:</p>
+                    
+                    <img src="images/part2/image18.png" alt="Deploy new agent button" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Wazuh dashboard - Deploy new agent</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">⚙️</div>
+                    <div>
+                        <h3 class="step-title">Configure Agent Settings</h3>
+                        <p class="step-subtitle">Enter server address and get install command</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Enter the server address as your Wazuh public server IP:</p>
+                    
+                    <img src="images/part2/image19.png" alt="Agent configuration" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Configuring agent with Wazuh server address</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📦</div>
+                    <div>
+                        <h3 class="step-title">Install the Agent on Windows 10</h3>
+                        <p class="step-subtitle">Run the installation command</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Run the provided command to download and install the agent on your Windows 10 VM:</p>
+                    
+                    <img src="images/part2/image20.png" alt="Install command" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Agent installation command</p>
+
+                    <img src="images/part2/image21.png" alt="Installation progress" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Agent installation in progress</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Wazuh agent started successfully on our Windows 10 VM!
+                        </div>
+                    </div>
+
+                    <img src="images/part2/image22.png" alt="Agent started" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Wazuh agent running on Windows 10</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔥</div>
+                    <div>
+                        <h3 class="step-title">Configure Firewall on Wazuh Server</h3>
+                        <p class="step-subtitle">Allow agent communication ports</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>On the SSH Wazuh server, add some ports to UFW to allow agent communication:</p>
+                    
+                    <img src="images/part2/image23.png" alt="UFW ports" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Adding ports to UFW on Wazuh server</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">✅</div>
+                    <div>
+                        <h3 class="step-title">Verify Agent Connection</h3>
+                        <p class="step-subtitle">Confirm the agent is reporting to Wazuh</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>We can confirm our agent is now talking to our Wazuh manager:</p>
+                    
+                    <img src="images/part2/image24.png" alt="Agent connected" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Agent successfully connected to Wazuh manager</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            The Windows 10 agent is now actively communicating with the Wazuh manager and ready to collect telemetry!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Recap -->
+    <section class="section" id="recap">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">05 // RECAP</div>
+                <h2 class="section-title">What We Accomplished</h2>
+                <p class="section-desc">Summary of Part 2 and what's coming next.</p>
+            </div>
+
+            <div class="recap-grid fade-in">
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Configured Apache Cassandra with custom cluster name and network settings</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Configured Elasticsearch and troubleshot YAML configuration issues</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Set up TheHive with proper permissions and accessed the web interface</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Deployed Wazuh agent on Windows 10 VM</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Configured firewall rules for agent communication</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Verified agent is successfully reporting to Wazuh manager</div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in" style="margin-top: 3rem;">
+                <div class="step-header">
+                    <div class="step-icon">🚀</div>
+                    <div>
+                        <h3 class="step-title">Up Next: Part 3</h3>
+                        <p class="step-subtitle">Generating telemetry and creating alerts</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In the next part of this series, we'll start generating malicious telemetry and see how Wazuh detects and alerts on suspicious activity. We'll also explore TheHive for case management.</p>
+                    
+                    <div class="info-box">
+                        <div class="info-box-icon">📚</div>
+                        <div class="info-box-content">
+                            Stay tuned for Part 3 where we put our SOC automation lab to work!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <div class="nav-footer">
+        <a href="soc-lab-part1.html" class="nav-btn">
+            <span>←</span>
+            <div>
+                <div class="nav-btn-label">Previous</div>
+                <div class="nav-btn-title">Part 1: Installation</div>
+            </div>
+        </a>
+        <a href="soc-lab-part3.html" class="nav-btn">
+            <div>
+                <div class="nav-btn-label">Next</div>
+                <div class="nav-btn-title">Part 3: Telemetry</div>
+            </div>
+            <span>→</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            Brennan Vigna © 2025 · <a href="index.html">Cybersecurity Student & IT Professional</a>
+        </p>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Section Navigation
+        const sections = ['hero', 'cassandra', 'elasticsearch', 'thehive', 'wazuh', 'recap'];
+        const navDots = document.querySelectorAll('.section-nav-dot');
+
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const sectionId = dot.getAttribute('data-section');
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        navDots.forEach(dot => dot.classList.remove('active'));
+                        navDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Fade-in animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.color = 'var(--terminal-green)';
+                button.style.borderColor = 'var(--terminal-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                    button.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

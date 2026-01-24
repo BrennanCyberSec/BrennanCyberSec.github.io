@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="https://brennancybersec.github.io/images/og-preview.png">
+    <title>SOC Automation Lab - Part 3 | Brennan Vigna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111820;
+            --bg-tertiary: #1a2130;
+            --terminal-green: #00ff9d;
+            --terminal-green-dim: #00cc7d;
+            --terminal-blue: #00d4ff;
+            --terminal-purple: #b366ff;
+            --terminal-orange: #ff9d00;
+            --terminal-red: #ff4757;
+            --text-primary: #e6edf3;
+            --text-secondary: #a8b2bd;
+            --text-muted: #6e7a88;
+            --border-color: #21262d;
+            --glow-green: 0 0 20px rgba(0, 255, 157, 0.3);
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bg-primary);
+        }
+
+        .nav-logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--terminal-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 20, 0.98);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--terminal-green);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-tertiary);
+            z-index: 998;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--terminal-green), var(--terminal-blue));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-green);
+        }
+
+        /* Section Navigation */
+        .section-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-nav-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section-nav-dot:hover,
+        .section-nav-dot.active {
+            border-color: var(--terminal-green);
+            background: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .section-nav-dot::before {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-nav-dot:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1024px) {
+            .section-nav {
+                display: none;
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--terminal-green);
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .scroll-top:hover svg {
+            stroke: var(--bg-primary);
+        }
+
+        .scroll-top svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--terminal-green);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--terminal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .section-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-number::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--terminal-green);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-copy {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy:hover {
+            border-color: var(--terminal-green);
+            color: var(--terminal-green);
+        }
+
+        .code-content {
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .code-content .comment { color: var(--text-muted); }
+        .code-content .command { color: var(--terminal-blue); }
+        .code-content .flag { color: var(--terminal-orange); }
+        .code-content .string { color: var(--terminal-green); }
+        .code-content .path { color: var(--terminal-purple); }
+
+        /* Screenshot images */
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 1.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .screenshot:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--terminal-green);
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-box.success {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 157, 0, 0.1);
+            border-color: rgba(255, 157, 0, 0.3);
+        }
+
+        .info-box.danger {
+            background: rgba(255, 71, 87, 0.1);
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .info-box-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Recap Section */
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recap-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .recap-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 255, 157, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terminal-green);
+            flex-shrink: 0;
+        }
+
+        .recap-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Navigation Footer */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .nav-btn-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-btn-title {
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-text a {
+            color: var(--terminal-green);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terminal-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">BV</div>
+            <span class="nav-logo-text">Brennan Vigna</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="labs.html">Labs</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="labs.html">Labs</a>
+        <a href="tools.html">Tools</a>
+        <a href="resume.html">Resume</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="section-nav">
+        <div class="section-nav-dot active" data-label="Overview" data-section="hero"></div>
+        <div class="section-nav-dot" data-label="Sysmon Telemetry" data-section="sysmon"></div>
+        <div class="section-nav-dot" data-label="Mimikatz Setup" data-section="mimikatz"></div>
+        <div class="section-nav-dot" data-label="Wazuh Config" data-section="wazuh-config"></div>
+        <div class="section-nav-dot" data-label="Detection Rule" data-section="detection"></div>
+        <div class="section-nav-dot" data-label="Recap" data-section="recap"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Lightbox for images -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged screenshot" id="lightbox-img">
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Part 3 of 4</div>
+            <h1 class="hero-title">
+                <span class="highlight">Telemetry</span> & Detection Rules
+            </h1>
+            <p class="hero-subtitle">
+                Configuring Sysmon telemetry, simulating attacks with Mimikatz, and creating custom detection rules in Wazuh.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1: Sysmon Telemetry -->
+    <section class="section" id="sysmon">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">01 // SYSMON TELEMETRY</div>
+                <h2 class="section-title">Sending Telemetry to Wazuh</h2>
+                <p class="section-desc">Configuring the Windows VM to forward Sysmon logs to the Wazuh manager.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <h3 class="step-title">Configure ossec.conf</h3>
+                        <p class="step-subtitle">Set up agent communication with Wazuh manager</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>The <code>ossec.conf</code> file contains the configuration for how our agent talks to the Wazuh manager. We need to update the log location settings.</p>
+                    
+                    <img src="images/part3/image1.png" alt="ossec.conf configuration" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// ossec.conf agent configuration file</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔄</div>
+                    <div>
+                        <h3 class="step-title">Restart Wazuh Service</h3>
+                        <p class="step-subtitle">Apply the configuration changes</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>After changing the log location, open the Services app (search "services" in the Windows search bar), find the Wazuh service, and restart it.</p>
+                    
+                    <img src="images/part3/image2.png" alt="Restarting Wazuh service" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Restarting the Wazuh service in Windows Services</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">✅</div>
+                    <div>
+                        <h3 class="step-title">Verify Logs in Wazuh</h3>
+                        <p class="step-subtitle">Confirm Sysmon telemetry is flowing</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>After a few minutes, refresh Wazuh on your local machine and go to <strong>Explore → Discover</strong>. Type "sysmon" in the search to see if logs are coming through.</p>
+                    
+                    <img src="images/part3/image3.png" alt="Sysmon logs in Wazuh" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Sysmon logs appearing in Wazuh Discover</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Our configs worked! Sysmon telemetry is now flowing to Wazuh.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Mimikatz Setup -->
+    <section class="section" id="mimikatz">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">02 // MIMIKATZ SETUP</div>
+                <h2 class="section-title">Preparing for Attack Simulation</h2>
+                <p class="section-desc">Disabling Windows Defender and running Mimikatz to generate telemetry.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🛡️</div>
+                    <div>
+                        <h3 class="step-title">Disable Windows Defender</h3>
+                        <p class="step-subtitle">Allow Mimikatz to run for testing</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>To generate Mimikatz telemetry in our lab environment, we need to temporarily disable Windows Defender on the Windows VM.</p>
+                    
+                    <div class="info-box warning">
+                        <div class="info-box-icon">⚠️</div>
+                        <div class="info-box-content">
+                            <strong>Lab Environment Only:</strong> Only disable security controls in isolated lab environments. Never do this on production systems.
+                        </div>
+                    </div>
+
+                    <p>Go to <strong>Virus & threat protection settings</strong> and disable the protection features:</p>
+                    
+                    <img src="images/part3/image4.png" alt="Disabling Windows Defender" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Disabling Windows Defender for lab testing</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔓</div>
+                    <div>
+                        <h3 class="step-title">Run Mimikatz</h3>
+                        <p class="step-subtitle">Execute the credential dumping tool</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Run Mimikatz on the Windows VM to simulate a credential dumping attack. This will generate telemetry that Wazuh can detect.</p>
+                    
+                    <img src="images/part3/image5.png" alt="Running Mimikatz" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Mimikatz execution on Windows VM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Wazuh Configuration -->
+    <section class="section" id="wazuh-config">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">03 // WAZUH CONFIGURATION</div>
+                <h2 class="section-title">Enabling Full Logging</h2>
+                <p class="section-desc">Configuring Wazuh to capture all logs and archive them.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <h3 class="step-title">Enable Log All Settings</h3>
+                        <p class="step-subtitle">Capture complete telemetry data</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In the Wazuh manager's configuration file, we need to change <code>logall</code> and <code>logall_json</code> to "yes" to capture all events:</p>
+                    
+                    <img src="images/part3/image6.png" alt="Editing logall settings" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Changing logall settings in ossec.conf</p>
+
+                    <img src="images/part3/image7.png" alt="Logall JSON enabled" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// logall_json set to yes</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔄</div>
+                    <div>
+                        <h3 class="step-title">Restart Wazuh Manager</h3>
+                        <p class="step-subtitle">Apply configuration changes</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Since we made changes to the .conf file, we need to restart the Wazuh manager service:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">systemctl restart</span> <span class="string">wazuh-manager</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/part3/image8.png" alt="Restarting Wazuh manager" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Restarting Wazuh manager service</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📂</div>
+                    <div>
+                        <h3 class="step-title">Verify Log Storage</h3>
+                        <p class="step-subtitle">Confirm logs are being archived</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Check that the generated logs are being stored properly:</p>
+                    
+                    <img src="images/part3/image9.png" alt="Logs being stored" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Generated logs being stored in archives</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">⚙️</div>
+                    <div>
+                        <h3 class="step-title">Configure Filebeat</h3>
+                        <p class="step-subtitle">Enable archive ingestion</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Edit the Filebeat configuration to enable archive processing:</p>
+                    
+                    <img src="images/part3/image10.png" alt="Editing filebeat.yml" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Running nano to edit filebeat.yml</p>
+
+                    <img src="images/part3/image11.png" alt="Filebeat configuration" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Filebeat.yml configuration file</p>
+
+                    <p>Under <code>filebeat.modules</code>, change archives from <code>enabled: false</code> to <code>enabled: true</code>:</p>
+
+                    <img src="images/part3/image12.png" alt="Enabling archives" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Setting archives: enabled: true</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔄</div>
+                    <div>
+                        <h3 class="step-title">Restart Filebeat</h3>
+                        <p class="step-subtitle">Apply Filebeat changes</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Bash</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="command">systemctl restart</span> <span class="string">filebeat</span></code>
+                        </div>
+                    </div>
+
+                    <img src="images/part3/image13.png" alt="Restarting filebeat" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Restarting Filebeat service</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Detection Rule -->
+    <section class="section" id="detection">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">04 // DETECTION RULE</div>
+                <h2 class="section-title">Creating Mimikatz Detection</h2>
+                <p class="section-desc">Building a custom Wazuh rule to detect Mimikatz execution.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📋</div>
+                    <div>
+                        <h3 class="step-title">Add Custom Detection Rule</h3>
+                        <p class="step-subtitle">Create rule to detect Mimikatz</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In Wazuh, I added a custom rule that detects Mimikatz execution based on process creation events:</p>
+                    
+                    <img src="images/part3/image14.png" alt="Mimikatz detection rule" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Custom Wazuh rule for Mimikatz detection</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🎯</div>
+                    <div>
+                        <h3 class="step-title">Test the Detection</h3>
+                        <p class="step-subtitle">Run Mimikatz again to trigger the alert</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Let's run Mimikatz again on the Windows VM to see if it triggers our custom rule in Wazuh.</p>
+                    
+                    <p>After running Mimikatz, we can see the rule we created got a hit on the Mimikatz execution:</p>
+
+                    <img src="images/part3/image15.png" alt="Mimikatz alert triggered" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Alert triggered! Mimikatz execution detected</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Our custom detection rule successfully identified the Mimikatz execution!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📝</div>
+                    <div>
+                        <h3 class="step-title">Alert Details</h3>
+                        <p class="step-subtitle">View the detection description</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Here is the description we created for the alert, showing the details of the detected activity:</p>
+                    
+                    <img src="images/part3/image16.png" alt="Alert description" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Detailed alert description for Mimikatz detection</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Recap -->
+    <section class="section" id="recap">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">05 // RECAP</div>
+                <h2 class="section-title">What We Accomplished</h2>
+                <p class="section-desc">Summary of Part 3 and what's coming next.</p>
+            </div>
+
+            <div class="recap-grid fade-in">
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Configured Sysmon telemetry to flow to Wazuh manager</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Disabled Windows Defender for lab testing</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Ran Mimikatz to simulate credential dumping attack</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Enabled full logging with logall and logall_json</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Configured Filebeat to ingest archive logs</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Created custom Wazuh rule to detect Mimikatz execution</div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in" style="margin-top: 3rem;">
+                <div class="step-header">
+                    <div class="step-icon">🚀</div>
+                    <div>
+                        <h3 class="step-title">Up Next: Part 4</h3>
+                        <p class="step-subtitle">Building the automation pipeline</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In the final part of this series, we'll build an end-to-end automation pipeline using Shuffle. We'll enrich alerts with VirusTotal, create cases in TheHive, and set up email notifications for SOC analysts.</p>
+                    
+                    <div class="info-box">
+                        <div class="info-box-icon">📚</div>
+                        <div class="info-box-content">
+                            Continue to Part 4 to complete the SOC automation workflow!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <div class="nav-footer">
+        <a href="soc-lab-part2.html" class="nav-btn">
+            <span>←</span>
+            <div>
+                <div class="nav-btn-label">Previous</div>
+                <div class="nav-btn-title">Part 2: Configuration</div>
+            </div>
+        </a>
+        <a href="soc-lab-part4.html" class="nav-btn">
+            <div>
+                <div class="nav-btn-label">Next</div>
+                <div class="nav-btn-title">Part 4: Automation</div>
+            </div>
+            <span>→</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            Brennan Vigna © 2025 · <a href="index.html">Cybersecurity Student & IT Professional</a>
+        </p>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Section Navigation
+        const sections = ['hero', 'sysmon', 'mimikatz', 'wazuh-config', 'detection', 'recap'];
+        const navDots = document.querySelectorAll('.section-nav-dot');
+
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const sectionId = dot.getAttribute('data-section');
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        navDots.forEach(dot => dot.classList.remove('active'));
+                        navDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Fade-in animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.color = 'var(--terminal-green)';
+                button.style.borderColor = 'var(--terminal-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                    button.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="https://brennancybersec.github.io/images/og-preview.png">
+    <title>SOC Automation Lab - Part 4 | Brennan Vigna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111820;
+            --bg-tertiary: #1a2130;
+            --terminal-green: #00ff9d;
+            --terminal-green-dim: #00cc7d;
+            --terminal-blue: #00d4ff;
+            --terminal-purple: #b366ff;
+            --terminal-orange: #ff9d00;
+            --terminal-red: #ff4757;
+            --text-primary: #e6edf3;
+            --text-secondary: #a8b2bd;
+            --text-muted: #6e7a88;
+            --border-color: #21262d;
+            --glow-green: 0 0 20px rgba(0, 255, 157, 0.3);
+            --glow-blue: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--bg-primary);
+        }
+
+        .nav-logo-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--terminal-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--terminal-green);
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 20, 0.98);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--terminal-green);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .mobile-menu {
+                display: flex;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-tertiary);
+            z-index: 998;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--terminal-green), var(--terminal-blue));
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: var(--glow-green);
+        }
+
+        /* Section Navigation */
+        .section-nav {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-nav-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .section-nav-dot:hover,
+        .section-nav-dot.active {
+            border-color: var(--terminal-green);
+            background: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .section-nav-dot::before {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-nav-dot:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 1024px) {
+            .section-nav {
+                display: none;
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--terminal-green);
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .scroll-top:hover svg {
+            stroke: var(--bg-primary);
+        }
+
+        .scroll-top svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--terminal-green);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--terminal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .section-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--terminal-green);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-number::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--terminal-green);
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .code-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .code-copy {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .code-copy:hover {
+            border-color: var(--terminal-green);
+            color: var(--terminal-green);
+        }
+
+        .code-content {
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        .code-content code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .code-content .comment { color: var(--text-muted); }
+        .code-content .command { color: var(--terminal-blue); }
+        .code-content .flag { color: var(--terminal-orange); }
+        .code-content .string { color: var(--terminal-green); }
+        .code-content .path { color: var(--terminal-purple); }
+
+        /* Screenshot images */
+        .screenshot {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin: 1.5rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .screenshot:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--terminal-green);
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-box.success {
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 157, 0, 0.1);
+            border-color: rgba(255, 157, 0, 0.3);
+        }
+
+        .info-box-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-box-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Workflow diagram */
+        .workflow-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--terminal-blue);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .workflow-box h4 {
+            color: var(--terminal-blue);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .workflow-step {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .workflow-step .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-step .label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .workflow-arrow {
+            color: var(--terminal-green);
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .workflow-steps {
+                flex-direction: column;
+            }
+            .workflow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Recap Section */
+        .recap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .recap-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .recap-check {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 255, 157, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--terminal-green);
+            flex-shrink: 0;
+        }
+
+        .recap-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Navigation Footer */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--terminal-green);
+            box-shadow: var(--glow-green);
+        }
+
+        .nav-btn-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-btn-title {
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-text a {
+            color: var(--terminal-green);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terminal-green);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">BV</div>
+            <span class="nav-logo-text">Brennan Vigna</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="labs.html">Labs</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="labs.html">Labs</a>
+        <a href="tools.html">Tools</a>
+        <a href="resume.html">Resume</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Section Navigation -->
+    <div class="section-nav">
+        <div class="section-nav-dot active" data-label="Overview" data-section="hero"></div>
+        <div class="section-nav-dot" data-label="Shuffle Setup" data-section="shuffle"></div>
+        <div class="section-nav-dot" data-label="VirusTotal" data-section="virustotal"></div>
+        <div class="section-nav-dot" data-label="TheHive Integration" data-section="thehive"></div>
+        <div class="section-nav-dot" data-label="Email Alerts" data-section="email"></div>
+        <div class="section-nav-dot" data-label="Recap" data-section="recap"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Lightbox for images -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="Enlarged screenshot" id="lightbox-img">
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Part 4 of 4</div>
+            <h1 class="hero-title">
+                <span class="highlight">SOC Automation</span> with Shuffle
+            </h1>
+            <p class="hero-subtitle">
+                Building an end-to-end automation pipeline that detects threats, enriches data with VirusTotal, creates cases in TheHive, and notifies analysts.
+            </p>
+
+            <!-- Workflow Diagram -->
+            <div class="workflow-box">
+                <h4>Automation Pipeline</h4>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="icon">🛡️</div>
+                        <div class="label">Wazuh Alert</div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="icon">🔀</div>
+                        <div class="label">Shuffle</div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="icon">🔍</div>
+                        <div class="label">VirusTotal</div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="icon">🐝</div>
+                        <div class="label">TheHive</div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="icon">📧</div>
+                        <div class="label">Email Alert</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Shuffle Setup -->
+    <section class="section" id="shuffle">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">01 // SHUFFLE SETUP</div>
+                <h2 class="section-title">Creating the Shuffle Workflow</h2>
+                <p class="section-desc">Setting up the webhook trigger and connecting Wazuh.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔗</div>
+                    <div>
+                        <h3 class="step-title">Create Webhook Trigger</h3>
+                        <p class="step-subtitle">Configure Shuffle to receive Wazuh alerts</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>In Shuffle, I created a new workflow and added a webhook as the trigger. This generates a unique URI that Wazuh will send alerts to.</p>
+                    
+                    <p>Next, I edited the Wazuh Manager <code>ossec.conf</code> file to add a Shuffle integration that sends alerts in JSON format to the webhook. I filtered by a specific rule ID (100002) to only send relevant Mimikatz detection alerts.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">ossec.conf Integration</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="comment">&lt;!-- Shuffle Integration --&gt;</span>
+&lt;integration&gt;
+  &lt;name&gt;shuffle&lt;/name&gt;
+  &lt;hook_url&gt;<span class="string">https://shuffler.io/api/v1/hooks/webhook_[YOUR_ID]</span>&lt;/hook_url&gt;
+  &lt;rule_id&gt;<span class="flag">100002</span>&lt;/rule_id&gt;
+  &lt;alert_format&gt;<span class="string">json</span>&lt;/alert_format&gt;
+&lt;/integration&gt;</code>
+                        </div>
+                    </div>
+
+                    <p>After restarting Wazuh Manager, I generated a Mimikatz event on my Windows VM to confirm the alert was produced and that Shuffle successfully received it.</p>
+
+                    <img src="images/part4/image1.png" alt="Shuffle receiving Wazuh alert" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Shuffle workflow receiving Wazuh alert via webhook</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Alert successfully received in Shuffle from Wazuh!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: VirusTotal Enrichment -->
+    <section class="section" id="virustotal">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">02 // VIRUSTOTAL ENRICHMENT</div>
+                <h2 class="section-title">Hash Extraction & Threat Intel</h2>
+                <p class="section-desc">Extracting hashes and enriching with VirusTotal data.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔍</div>
+                    <div>
+                        <h3 class="step-title">Regex Capture Group</h3>
+                        <p class="step-subtitle">Extract SHA-256 hash from alert data</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I added a regex capture step in Shuffle to extract the SHA-256 hash from the alert data. This regex looks into the hashes field, performs the pattern match, and pulls the hash value.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">Regex Pattern</span>
+                            <button class="code-copy" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-content">
+                            <code><span class="string">SHA256=([A-Fa-f0-9]{64})</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🦠</div>
+                    <div>
+                        <h3 class="step-title">VirusTotal Lookup</h3>
+                        <p class="step-subtitle">Query threat intelligence for the hash</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I sent the extracted hash to VirusTotal for enrichment. After correcting the input to ensure only the hash value was passed (not the full field), the lookup succeeded with a 200 response.</p>
+
+                    <div class="info-box">
+                        <div class="info-box-icon">💡</div>
+                        <div class="info-box-content">
+                            <strong>Tip:</strong> Make sure to pass only the hash value to VirusTotal, not the entire field containing "SHA256=". Use the regex capture group output directly.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: TheHive Integration -->
+    <section class="section" id="thehive">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">03 // THEHIVE INTEGRATION</div>
+                <h2 class="section-title">Automated Case Creation</h2>
+                <p class="section-desc">Connecting Shuffle to TheHive for case management.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">🔑</div>
+                    <div>
+                        <h3 class="step-title">Configure TheHive Authentication</h3>
+                        <p class="step-subtitle">Set up organization, service account, and API key</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I integrated TheHive by:</p>
+                    <ul style="color: var(--text-secondary); margin: 1rem 0 1rem 1.5rem;">
+                        <li>Creating an organization in TheHive</li>
+                        <li>Creating a service account for automation</li>
+                        <li>Generating an API key for the service account</li>
+                        <li>Configuring Shuffle authentication with TheHive instance URL and API key</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📋</div>
+                    <div>
+                        <h3 class="step-title">Map Alert Fields</h3>
+                        <p class="step-subtitle">Configure the Create Alert action</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I mapped fields from the Wazuh alert into a Create Alert action in Shuffle. This required fixing some JSON formatting and data type issues — for example, the severity field needed to be numeric, not a string.</p>
+
+                    <img src="images/part4/image2.png" alt="TheHive alert created" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Alert created successfully in TheHive</p>
+
+                    <img src="images/part4/image3.png" alt="TheHive alert details" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Alert details in TheHive dashboard</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Alert successfully created in TheHive with all mapped fields from Wazuh!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Email Notification -->
+    <section class="section" id="email">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">04 // EMAIL NOTIFICATION</div>
+                <h2 class="section-title">Alerting the SOC Analyst</h2>
+                <p class="section-desc">Sending automated email notifications when threats are detected.</p>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">📧</div>
+                    <div>
+                        <h3 class="step-title">Configure Email Step</h3>
+                        <p class="step-subtitle">Add email notification to the workflow</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I added an email notification step in Shuffle so a SOC analyst is notified when the workflow runs. The email includes relevant alert details from the Wazuh detection.</p>
+
+                    <img src="images/part4/image4.png" alt="Email configuration in Shuffle" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Configuring email notification in Shuffle</p>
+
+                    <img src="images/part4/image5.png" alt="Email settings" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Email notification settings</p>
+                </div>
+            </div>
+
+            <div class="step-card fade-in">
+                <div class="step-header">
+                    <div class="step-icon">✅</div>
+                    <div>
+                        <h3 class="step-title">End-to-End Testing</h3>
+                        <p class="step-subtitle">Verify the complete automation pipeline</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I tested the workflow using a previous execution, confirmed the email was delivered, and verified the full automation works end to end.</p>
+
+                    <img src="images/part4/image6.png" alt="Complete workflow" class="screenshot" onclick="openLightbox(this)">
+                    <p class="screenshot-caption">// Complete automation workflow running successfully</p>
+
+                    <div class="info-box success">
+                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-content">
+                            Full automation pipeline tested and working! Wazuh detection → Shuffle → VirusTotal enrichment → TheHive case → Email notification.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Recap -->
+    <section class="section" id="recap">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-number">05 // RECAP</div>
+                <h2 class="section-title">Project Complete</h2>
+                <p class="section-desc">Summary of the full SOC Automation Lab series.</p>
+            </div>
+
+            <div class="recap-grid fade-in">
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Created Shuffle workflow with webhook trigger connected to Wazuh</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Extracted SHA-256 hashes using regex capture groups</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Integrated VirusTotal for automated threat intelligence enrichment</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Connected TheHive for automated case creation</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Added email notifications to alert SOC analysts</div>
+                </div>
+                <div class="recap-item">
+                    <div class="recap-check">✓</div>
+                    <div class="recap-text">Tested and verified full end-to-end automation pipeline</div>
+                </div>
+            </div>
+
+            <div class="step-card fade-in" style="margin-top: 3rem;">
+                <div class="step-header">
+                    <div class="step-icon">🎉</div>
+                    <div>
+                        <h3 class="step-title">SOC Automation Lab Complete</h3>
+                        <p class="step-subtitle">From zero to full automation in four parts</p>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>I built an end-to-end SOC automation pipeline in my homelab that takes a Wazuh detection, enriches it with VirusTotal threat intelligence, creates an alert in TheHive for case management, and notifies an analyst via email.</p>
+                    
+                    <p>This project covered:</p>
+                    <ul style="color: var(--text-secondary); margin: 1rem 0 1rem 1.5rem;">
+                        <li><strong>Part 1:</strong> Installing Sysmon, Wazuh, and TheHive</li>
+                        <li><strong>Part 2:</strong> Configuring Cassandra, Elasticsearch, and connecting agents</li>
+                        <li><strong>Part 3:</strong> Generating telemetry and creating detection rules</li>
+                        <li><strong>Part 4:</strong> Building the automation pipeline with Shuffle</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <div class="info-box-icon">📚</div>
+                        <div class="info-box-content">
+                            This lab demonstrates practical skills in SIEM deployment, detection engineering, case management, and security automation — core competencies for SOC analyst roles.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Footer -->
+    <div class="nav-footer">
+        <a href="soc-lab-part3.html" class="nav-btn">
+            <span>←</span>
+            <div>
+                <div class="nav-btn-label">Previous</div>
+                <div class="nav-btn-title">Part 3: Telemetry</div>
+            </div>
+        </a>
+        <a href="labs.html" class="nav-btn">
+            <div>
+                <div class="nav-btn-label">Back to</div>
+                <div class="nav-btn-title">All Labs</div>
+            </div>
+            <span>→</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">
+            Brennan Vigna © 2025 · <a href="index.html">Cybersecurity Student & IT Professional</a>
+        </p>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Section Navigation
+        const sections = ['hero', 'shuffle', 'virustotal', 'thehive', 'email', 'recap'];
+        const navDots = document.querySelectorAll('.section-nav-dot');
+
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const sectionId = dot.getAttribute('data-section');
+                document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+            
+            sections.forEach((sectionId, index) => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        navDots.forEach(dot => dot.classList.remove('active'));
+                        navDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Fade-in animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.color = 'var(--terminal-green)';
+                button.style.borderColor = 'var(--terminal-green)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                    button.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

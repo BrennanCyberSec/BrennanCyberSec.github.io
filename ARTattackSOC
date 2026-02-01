@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="https://brennancybersec.github.io/images/og-preview.png">
+    <meta name="description" content="Detection engineering with Atomic Red Team - automating adversary simulation, writing custom Wazuh rules, and validating MITRE ATT&CK coverage in a SOC lab environment.">
+    <meta name="author" content="Brennan Vigna">
+    <title>Section 2: Detection Engineering | Brennan Vigna</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Page-specific styles for lab content -->
+    <style>
+        /* ── Section 2 Lab Content Styles ── */
+
+        .lab-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .lab-title-block {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .lab-title-block h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .lab-title-block .lab-subtitle {
+            color: #8892a0;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .lab-meta-info {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: #5a6577;
+        }
+        .lab-meta-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Step sections */
+        .lab-step {
+            margin-bottom: 3rem;
+        }
+        .lab-step h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #e1e7ef;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .lab-step h2 .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .lab-step h3 {
+            font-size: 1.05rem;
+            margin: 1.5rem 0 0.6rem;
+            color: #c5cdd8;
+        }
+        .lab-step p {
+            color: #9aa5b4;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            margin: 1rem 0 1.5rem;
+            overflow: hidden;
+        }
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.75rem;
+            color: #5a6577;
+        }
+        .code-header .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .code-header .dot-red { background: #ff5f57; }
+        .code-header .dot-yellow { background: #febc2e; }
+        .code-header .dot-green { background: #28c840; }
+        .code-body {
+            padding: 1rem 1.25rem;
+            overflow-x: auto;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.82rem;
+            line-height: 1.65;
+            color: #c9d1d9;
+        }
+        .code-body .prompt { color: #58a6ff; user-select: none; }
+        .code-body .cmd { color: #ffa657; }
+        .code-body .flag { color: #79c0ff; }
+        .code-body .string { color: #a5d6ff; }
+        .code-body .comment { color: #484f58; font-style: italic; }
+        .code-body .output { color: #6e7681; }
+        .code-body .success { color: #3fb950; }
+        .code-body .warning { color: #d29922; }
+
+        /* Screenshots */
+        .screenshot {
+            margin: 1.25rem 0 1.75rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+        .screenshot-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.85rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.7rem;
+            color: #484f58;
+        }
+        .screenshot-bar .dots {
+            display: flex;
+            gap: 5px;
+            margin-right: 0.4rem;
+        }
+        .screenshot-bar .dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+        .screenshot-caption {
+            padding: 0.6rem 0.85rem;
+            font-size: 0.75rem;
+            color: #5a6577;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Technique table */
+        .technique-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0 1.75rem;
+            font-size: 0.85rem;
+        }
+        .technique-table th {
+            text-align: left;
+            padding: 0.7rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.72rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .technique-table td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #9aa5b4;
+            vertical-align: top;
+        }
+        .technique-table tr:last-child td {
+            border-bottom: none;
+        }
+        .technique-table .tid {
+            color: #ffa657;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+        .technique-table .tactic-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 3px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            font-weight: 500;
+        }
+        .technique-table .status-detected {
+            color: #3fb950;
+            font-weight: 600;
+        }
+
+        /* Callout boxes */
+        .callout {
+            border-left: 3px solid #60a5fa;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+            background: rgba(59, 130, 246, 0.06);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85rem;
+            color: #9aa5b4;
+            line-height: 1.7;
+        }
+        .callout.tip {
+            border-left-color: #3fb950;
+            background: rgba(63, 185, 80, 0.06);
+        }
+        .callout.warning {
+            border-left-color: #d29922;
+            background: rgba(210, 153, 34, 0.06);
+        }
+        .callout strong {
+            color: #c5cdd8;
+        }
+
+        /* Pipeline diagram */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 1.5rem 0 2rem;
+            flex-wrap: wrap;
+            padding: 1.25rem 0;
+        }
+        .pipeline-node {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.75rem 1.1rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.78rem;
+            min-width: 110px;
+            transition: border-color 0.2s;
+        }
+        .pipeline-node:hover {
+            border-color: rgba(96, 165, 250, 0.4);
+        }
+        .pipeline-node .node-label {
+            color: #e1e7ef;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        .pipeline-node .node-sub {
+            color: #5a6577;
+            font-size: 0.65rem;
+            margin-top: 0.2rem;
+        }
+        .pipeline-arrow {
+            color: #3fb950;
+            font-size: 1.1rem;
+            padding: 0 0.35rem;
+        }
+
+        /* Inline highlights */
+        .hl-blue { color: #60a5fa; }
+        .hl-green { color: #3fb950; }
+        .hl-amber { color: #ffa657; }
+        .hl-red { color: #f85149; }
+        code.inline {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.15rem 0.45rem;
+            border-radius: 3px;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.82em;
+            color: #c9d1d9;
+        }
+
+        /* Key takeaways */
+        .takeaway-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .takeaway-list li {
+            padding: 0.6rem 0 0.6rem 1.5rem;
+            position: relative;
+            color: #9aa5b4;
+            line-height: 1.65;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .takeaway-list li:last-child {
+            border-bottom: none;
+        }
+        .takeaway-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #3fb950;
+            font-weight: 700;
+        }
+
+        /* Navigation between sections */
+        .section-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .section-nav a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .section-nav a:hover {
+            background: rgba(96, 165, 250, 0.08);
+            border-color: rgba(96, 165, 250, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .lab-content { padding: 0 1rem 3rem; }
+            .lab-title-block h1 { font-size: 1.4rem; }
+            .pipeline { gap: 0.25rem; }
+            .pipeline-node { min-width: 80px; padding: 0.5rem 0.6rem; }
+            .lab-meta-info { flex-direction: column; gap: 0.5rem; }
+            .technique-table { font-size: 0.78rem; }
+            .technique-table th, .technique-table td { padding: 0.5rem 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">
+                <span class="site-logo">BV</span>
+                Brennan Vigna
+            </a>
+            <nav class="nav" id="main-nav" aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="labs.html" class="active" aria-current="page">Labs</a>
+                <a href="tools.html">Tools</a>
+                <a href="resume.html">Resume</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobile-nav">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+        <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+            <a href="index.html">Home</a>
+            <a href="labs.html" class="active">Labs</a>
+            <a href="tools.html">Tools</a>
+            <a href="resume.html">Resume</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <div class="lab-content">
+
+            <!-- Title Block -->
+            <div class="lab-title-block">
+                <h1>Section 2: Detection Engineering with Atomic Red Team</h1>
+                <p class="lab-subtitle">Automating adversary simulation, writing detection rules, and validating MITRE ATT&CK coverage in a live SOC environment.</p>
+                <div class="lab-meta-info">
+                    <span>📅 February 2026</span>
+                    <span>🏷️ Detection Engineering</span>
+                    <span>🛠️ Atomic Red Team · Wazuh · Sysmon · PowerShell</span>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 1: Objective & Context                  -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">1</span> Objective</h2>
+                <p>In Parts 1–4 of the SOC Automation Lab, I built the foundational pipeline: Sysmon collecting endpoint telemetry on a Windows 10 VM, Wazuh ingesting and analyzing logs, TheHive managing cases, and Shuffle automating the workflow between them. The detection testing in Part 3 relied on manually running tools like Mimikatz to trigger specific alerts.</p>
+                <p>This section takes a more systematic approach. Instead of manually executing one-off attacks, I'm using <strong class="hl-blue">Atomic Red Team</strong> — an open-source library of small, focused tests mapped directly to the MITRE ATT&CK framework. Each test simulates a specific adversary technique, which lets me validate whether my detection rules actually catch the activity they're supposed to catch.</p>
+                <p>The goal is to demonstrate a repeatable detection engineering workflow: <strong>execute a known technique → verify telemetry generation → confirm alert fires in Wazuh → document coverage gaps</strong>.</p>
+
+                <div class="callout">
+                    <strong>Why Atomic Red Team over manual tools?</strong> Mimikatz tests one thing well (credential dumping), but a real SOC needs to detect a wide range of adversary behaviors. ART provides 100+ tests across discovery, persistence, defense evasion, lateral movement, and more — all mapped to ATT&CK technique IDs. This means I can systematically measure detection coverage across the entire kill chain.
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 2: Detection Pipeline                   -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">2</span> Detection Pipeline</h2>
+                <p>Before running any tests, it's important to understand how an alert goes from adversary action to analyst notification. Here's the pipeline that's already in place from Parts 1–4:</p>
+
+                <div class="pipeline">
+                    <div class="pipeline-node">
+                        <div class="node-label">Atomic Red Team</div>
+                        <div class="node-sub">Execute technique</div>
+                    </div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-node">
+                        <div class="node-label">Sysmon</div>
+                        <div class="node-sub">Capture telemetry</div>
+                    </div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-node">
+                        <div class="node-label">Wazuh Agent</div>
+                        <div class="node-sub">Forward logs</div>
+                    </div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-node">
+                        <div class="node-label">Wazuh Manager</div>
+                        <div class="node-sub">Match rules → Alert</div>
+                    </div>
+                    <span class="pipeline-arrow">→</span>
+                    <div class="pipeline-node">
+                        <div class="node-label">Shuffle</div>
+                        <div class="node-sub">Automate response</div>
+                    </div>
+                </div>
+
+                <p>Every test I run follows this path. If a technique executes but no alert fires, I need to figure out where the chain broke: Did Sysmon capture the event? Did Wazuh ingest the log? Is there a rule that matches? This troubleshooting process is itself a core detection engineering skill.</p>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 3: Installing Atomic Red Team           -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">3</span> Installing Atomic Red Team</h2>
+                <p>Atomic Red Team runs directly on the target machine — in my case, the Windows 10 VM (agent name: <code class="inline">Wolverine-Windows</code>). The framework is PowerShell-based, which means installation and test execution both happen from an elevated PowerShell prompt.</p>
+
+                <h3>Installation Commands</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        Administrator: Windows PowerShell
+                    </div>
+                    <div class="code-body">
+<span class="comment"># Set execution policy to allow the install script</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Set-ExecutionPolicy</span> <span class="flag">Bypass</span> <span class="flag">-Scope</span> CurrentUser
+
+<span class="comment"># Install the Atomic Red Team execution framework</span>
+<span class="prompt">PS&gt; </span><span class="cmd">IEX</span> (IWR <span class="string">'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1'</span> <span class="flag">-UseBasicParsing</span>);
+<span class="cmd">Install-AtomicRedTeam</span> <span class="flag">-getAtomics</span>
+
+<span class="comment"># Import the module</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Import-Module</span> <span class="string">"C:\AtomicRedTeam\invoke-atomicredteam\Invoke-AtomicRedTeam.psd1"</span>
+                    </div>
+                </div>
+
+                <p>Once installed, the atomics library lives at <code class="inline">C:\AtomicRedTeam\atomics</code> and contains test definitions for hundreds of ATT&CK techniques. Each technique folder includes YAML files describing what the test does, the commands it runs, and any prerequisites.</p>
+
+                <div class="screenshot">
+                    <div class="screenshot-bar">
+                        <div class="dots">
+                            <span style="background:#ff5f57"></span>
+                            <span style="background:#febc2e"></span>
+                            <span style="background:#28c840"></span>
+                        </div>
+                        PowerShell — Atomic Red Team Installation + T1016 Execution
+                    </div>
+                    <img src="assets/images/section2/art-install-t1016.png" alt="PowerShell window showing Atomic Red Team installation completion and T1016 System Network Configuration Discovery test execution with ShowDetails flag">
+                    <div class="screenshot-caption">ART installation confirmed, followed by T1016 execution with -ShowDetails showing all sub-tests for System Network Configuration Discovery including ipconfig, arp, nbtstat, net config, and TrickBot-style enumeration.</div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 4: Test Execution — T1016               -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">4</span> Test: T1016 — System Network Configuration Discovery</h2>
+                <p>The first technique I tested was <strong class="hl-amber">T1016</strong>, which falls under the <strong>Discovery</strong> tactic in the ATT&CK framework. Attackers use network configuration discovery early in an intrusion to understand the network layout — what subnets exist, what interfaces are available, what DNS servers are configured.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        PowerShell — Executing T1016
+                    </div>
+                    <div class="code-body">
+<span class="comment"># View test details before running</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Invoke-AtomicTest</span> <span class="flag">T1016</span> <span class="flag">-ShowDetails</span>
+
+<span class="comment"># Execute all sub-tests for T1016</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Invoke-AtomicTest</span> <span class="flag">T1016</span>
+                    </div>
+                </div>
+
+                <p>The <code class="inline">-ShowDetails</code> flag is useful for understanding what each test will actually do before running it. For T1016, the ART library includes multiple sub-tests:</p>
+
+                <table class="technique-table">
+                    <thead>
+                        <tr>
+                            <th>Test #</th>
+                            <th>Name</th>
+                            <th>Commands Executed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>System Network Configuration Discovery on Windows</td>
+                            <td><code class="inline">ipconfig /all</code>, <code class="inline">netsh interface show interface</code>, <code class="inline">arp -a</code>, <code class="inline">nbtstat -n</code>, <code class="inline">net config</code></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>List Windows Firewall Rules</td>
+                            <td><code class="inline">netsh advfirewall firewall show rule name=all</code></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>TrickBot Style Discovery</td>
+                            <td><code class="inline">ipconfig /all</code>, <code class="inline">net config workstation</code>, <code class="inline">net view /all /domain</code>, <code class="inline">nltest /domain_trusts</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Each of these sub-tests mimics real-world adversary behavior. The TrickBot-style variant is especially interesting — it replicates the exact commands the TrickBot banking trojan uses for network reconnaissance, as documented in public threat research.</p>
+
+                <div class="callout tip">
+                    <strong>Detection note:</strong> These commands individually are legitimate admin tools. The detection value comes from Wazuh correlating that multiple network enumeration commands executed in rapid succession from a single process — a pattern that's normal for ART/adversary tools but unusual for regular user activity.
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 5: Ransomware Simulation Setup          -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">5</span> Ransomware Simulation Setup</h2>
+                <p>To test ransomware-related detection rules, I needed to prepare the environment with files that the simulated ransomware could target. I created 20 dummy text files in <code class="inline">C:\TestFiles</code> to serve as encryption targets.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        PowerShell — Creating Test Files
+                    </div>
+                    <div class="code-body">
+<span class="comment"># Create the target directory</span>
+<span class="prompt">PS&gt; </span><span class="cmd">New-Item</span> <span class="flag">-Path</span> <span class="string">"C:\TestFiles"</span> <span class="flag">-ItemType</span> Directory <span class="flag">-Force</span>
+
+<span class="comment"># Generate 20 dummy files with sample business data</span>
+<span class="prompt">PS&gt; </span><span class="cmd">1..20</span> | <span class="cmd">ForEach-Object</span> {
+    <span class="string">"This is test document $_. Contains important business data."</span> |
+    <span class="cmd">Out-File</span> <span class="string">"C:\TestFiles\document$_.txt"</span>
+}
+
+<span class="comment"># Verify file creation</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Get-ChildItem</span> <span class="string">C:\TestFiles</span>
+                    </div>
+                </div>
+
+                <div class="screenshot">
+                    <div class="screenshot-bar">
+                        <div class="dots">
+                            <span style="background:#ff5f57"></span>
+                            <span style="background:#febc2e"></span>
+                            <span style="background:#28c840"></span>
+                        </div>
+                        PowerShell — Test File Creation
+                    </div>
+                    <img src="assets/images/section2/dummy-test-files.png" alt="PowerShell showing creation of C:\TestFiles directory and 20 dummy document files for ransomware testing">
+                    <div class="screenshot-caption">20 test documents created in C:\TestFiles, each containing simulated business data. These serve as targets for the ransomware simulation in the next step.</div>
+                </div>
+
+                <p>These files give the ransomware technique something to work with while keeping the test contained. In a real ransomware incident, the attacker would be targeting actual business documents, databases, and backups — which is why the next technique focuses on a common ransomware precursor: deleting shadow copies.</p>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 6: T1490 — Inhibit System Recovery      -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">6</span> Test: T1490 — Inhibit System Recovery</h2>
+                <p>Technique <strong class="hl-amber">T1490</strong> falls under the <strong>Impact</strong> tactic. Before encrypting files, ransomware operators almost always delete Volume Shadow Copies to prevent victims from recovering their data through Windows' built-in backup mechanism. This is one of the most reliable indicators that a ransomware attack is in progress.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        PowerShell — Executing T1490
+                    </div>
+                    <div class="code-body">
+<span class="comment"># Execute T1490 Test #1: Delete Volume Shadow Copies</span>
+<span class="prompt">PS&gt; </span><span class="cmd">Invoke-AtomicTest</span> <span class="flag">T1490</span> <span class="flag">-TestNumbers</span> 1
+
+<span class="output">Executing test: T1490-1 Windows - Delete Volume Shadow Copies
+vssadmin 1.1 - Volume Shadow Copy Service administrative command-line tool
+(C) Copyright 2001-2013 Microsoft Corp.
+No items found that satisfy the query.
+Exit code: 1
+Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
+                    </div>
+                </div>
+
+                <div class="screenshot">
+                    <div class="screenshot-bar">
+                        <div class="dots">
+                            <span style="background:#ff5f57"></span>
+                            <span style="background:#febc2e"></span>
+                            <span style="background:#28c840"></span>
+                        </div>
+                        PowerShell — T1490 Execution
+                    </div>
+                    <img src="assets/images/section2/t1490-shadow-copies.png" alt="PowerShell showing T1490 Atomic Red Team test execution - deleting volume shadow copies using vssadmin">
+                    <div class="screenshot-caption">T1490 test execution using vssadmin to delete volume shadow copies. The "No items found" message indicates no existing shadow copies were present, but the command execution itself is what triggers the detection.</div>
+                </div>
+
+                <div class="callout warning">
+                    <strong>Key insight:</strong> The test returned "No items found" because the VM had no existing shadow copies. However, the detection doesn't depend on whether the command succeeds — it depends on whether the command was <em>executed</em>. Sysmon captures the process creation event for <code class="inline">vssadmin.exe</code> regardless of the outcome, and the Wazuh rule triggers on the process name and arguments, not the exit code. This is an important detection engineering principle: detect the intent, not just the result.
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 7: Wazuh Alert Verification             -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">7</span> Verifying Alerts in Wazuh</h2>
+                <p>After executing the Atomic Red Team tests, I switched to the Wazuh dashboard to verify that alerts were being generated. This is the critical validation step — if the tests run but no alerts appear, the detection pipeline has a gap that needs to be investigated.</p>
+
+                <p>For both T1016 and T1490, I confirmed that Wazuh was generating alerts. The Sysmon events from the Windows 10 agent were being forwarded to Wazuh Manager, matched against detection rules, and producing alerts visible in the Security Events dashboard.</p>
+
+                <p>The verification process I followed for each technique:</p>
+
+                <ul class="takeaway-list">
+                    <li>Execute the Atomic Red Team test on the Windows 10 VM</li>
+                    <li>Open Event Viewer on the VM to confirm Sysmon captured the process creation events (Event ID 1)</li>
+                    <li>Check Wazuh dashboard → Security Events for alerts matching the technique</li>
+                    <li>Verify the alert contains the correct MITRE ATT&CK technique ID mapping</li>
+                    <li>Confirm the alert details include the expected process names and command-line arguments</li>
+                </ul>
+
+                <div class="callout tip">
+                    <strong>Troubleshooting tip:</strong> When alerts don't show up, work backwards through the pipeline. First check if Sysmon logged the event locally (Event Viewer → Applications and Services Logs → Microsoft → Windows → Sysmon). If Sysmon has it but Wazuh doesn't, the issue is in log forwarding (check ossec.conf on the agent). If Wazuh has the log but no alert fired, the issue is in the detection rule logic.
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 8: Techniques Tested                    -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">8</span> MITRE ATT&CK Coverage Summary</h2>
+                <p>Here's a summary of the techniques tested in this section, mapped to the ATT&CK framework. This type of coverage tracking is how real SOC teams measure and communicate their detection capabilities.</p>
+
+                <table class="technique-table">
+                    <thead>
+                        <tr>
+                            <th>Technique ID</th>
+                            <th>Name</th>
+                            <th>Tactic</th>
+                            <th>Detection Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="tid">T1016</td>
+                            <td>System Network Configuration Discovery</td>
+                            <td><span class="tactic-tag">Discovery</span></td>
+                            <td class="status-detected">✓ Detected</td>
+                        </tr>
+                        <tr>
+                            <td class="tid">T1490</td>
+                            <td>Inhibit System Recovery</td>
+                            <td><span class="tactic-tag">Impact</span></td>
+                            <td class="status-detected">✓ Detected</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>This is just the beginning. In future iterations of this section, I'll expand testing across additional tactics — credential access, lateral movement, defense evasion, and persistence — to build comprehensive coverage across the kill chain. Each technique tested adds to the evidence that this SOC environment can detect real-world adversary behavior.</p>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 9: Lessons Learned & Next Steps         -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">9</span> Lessons Learned</h2>
+
+                <ul class="takeaway-list">
+                    <li><strong>Atomic Red Team provides structure.</strong> Moving from manual Mimikatz execution to ART gave the testing process repeatable methodology. Every test is documented, mapped to ATT&CK, and can be re-run after rule changes to validate fixes.</li>
+                    <li><strong>Detection depends on telemetry quality.</strong> Without Sysmon's detailed process creation logs (Event ID 1), most of these techniques would be invisible to Wazuh. The investment in Sysmon configuration from Part 1 pays off here.</li>
+                    <li><strong>Detect intent, not just results.</strong> The T1490 test "failed" (no shadow copies to delete), but the alert still fired because the detection rule targets the command execution, not its outcome. This mirrors real-world detection engineering — adversaries don't always succeed on the first try.</li>
+                    <li><strong>Systematic testing reveals gaps.</strong> Running tests across multiple ATT&CK tactics quickly shows where detection rules exist and where they don't. This gap analysis is the foundation of a detection engineering program.</li>
+                    <li><strong>The pipeline is the product.</strong> The value isn't in any single tool — it's in the end-to-end pipeline that takes raw endpoint activity and turns it into actionable alerts. Each component (Sysmon → Wazuh → Shuffle) has to work correctly for detection to function.</li>
+                </ul>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- STEP 10: Next Steps                          -->
+            <!-- ============================================ -->
+            <div class="lab-step">
+                <h2><span class="step-num">10</span> What's Next</h2>
+                <p>This section established the detection engineering methodology. The next phases of the portfolio will build on this foundation:</p>
+
+                <ul class="takeaway-list">
+                    <li><strong>Section 3 — Incident Response Playbooks:</strong> Documenting formal IR procedures using Shuffle automation — defining exactly what happens when each alert type fires.</li>
+                    <li><strong>Expanded ART Testing:</strong> Running additional techniques across credential access (T1003), persistence (T1053, T1547), and defense evasion (T1562) to build broader detection coverage.</li>
+                    <li><strong>Custom Wazuh Rules:</strong> Writing detection rules for techniques where Wazuh's default ruleset doesn't have coverage, documenting the rule logic and testing methodology.</li>
+                    <li><strong>DFIR-IRIS Integration:</strong> Replacing TheHive with a self-hosted case management platform and integrating it into the existing Shuffle workflows.</li>
+                </ul>
+            </div>
+
+            <!-- Navigation -->
+            <div class="section-nav">
+                <a href="soc-lab-part4.html">← Part 4: Shuffle Automation</a>
+                <a href="labs.html">All Labs →</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Brennan Vigna &copy; 2025 &middot; Cybersecurity Student &amp; IT Support</p>
+            <div class="footer-links">
+                <a href="https://github.com/BrennanCyberSec" aria-label="GitHub Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/brennan-vigna-78386323b/" aria-label="LinkedIn Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="mailto:bvigna42@gmail.com" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/nav.js"></script>
+</body>
+</html>

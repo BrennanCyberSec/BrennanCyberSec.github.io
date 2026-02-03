@@ -480,7 +480,7 @@
                         </div>
                         PowerShell — Atomic Red Team Installation + T1016 Execution
                     </div>
-                    <img src="images/section2/art-install-t1016.png" alt="PowerShell window showing Atomic Red Team installation completion and T1016 System Network Configuration Discovery test execution with ShowDetails flag">
+                    <img src="images/section2/art-install-t1016_3.png" alt="PowerShell window showing Atomic Red Team installation completion and T1016 System Network Configuration Discovery test execution with ShowDetails flag">
                     <div class="screenshot-caption">ART installation confirmed, followed by T1016 execution with -ShowDetails showing all sub-tests for System Network Configuration Discovery including ipconfig, arp, nbtstat, net config, and TrickBot-style enumeration.</div>
                 </div>
             </div>
@@ -549,7 +549,7 @@
             <!-- ============================================ -->
             <div class="lab-step">
                 <h2><span class="step-num">5</span> Ransomware Simulation Setup</h2>
-                <p>To test ransomware detection rules, I needed to prepare the environment with files that the simulated ransomware could target. I created 20 dummy text files in <code class="inline">C:\TestFiles</code> to serve as encryption targets.</p>
+                <p>To test the ransomware detection rules, I needed to prepare the environment with files that the simulated ransomware could target. I created 20 dummy text files in <code class="inline">C:\TestFiles</code> to serve as encryption targets.</p>
 
                 <div class="code-block">
                     <div class="code-header">
@@ -582,7 +582,7 @@
                         </div>
                         PowerShell — Test File Creation
                     </div>
-                    <img src="images/section2/dummy-test-files.png" alt="PowerShell showing creation of C:\TestFiles directory and 20 dummy document files for ransomware testing">
+                    <img src="images/section2/dummy-test-files_3.png" alt="PowerShell showing creation of C:\TestFiles directory and 20 dummy document files for ransomware testing">
                     <div class="screenshot-caption">20 test documents created in C:\TestFiles, each containing simulated business data. These serve as targets for the ransomware simulation in the next step.</div>
                 </div>
 
@@ -625,7 +625,7 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                         </div>
                         PowerShell — T1490 Execution
                     </div>
-                    <img src="images/section2/t1490-shadow-copies.png" alt="PowerShell showing T1490 Atomic Red Team test execution - deleting volume shadow copies using vssadmin">
+                    <img src="images/section2/t1490-shadow-copies_3.png" alt="PowerShell showing T1490 Atomic Red Team test execution - deleting volume shadow copies using vssadmin">
                     <div class="screenshot-caption">T1490 test execution using vssadmin to delete volume shadow copies. The "No items found" message indicates no existing shadow copies were present, but the command execution itself is what triggers the detection.</div>
                 </div>
 

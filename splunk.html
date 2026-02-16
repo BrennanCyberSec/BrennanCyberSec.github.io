@@ -530,7 +530,7 @@
             <h1>Splunk + Wazuh Integration Lab</h1>
             <div class="meta">
                 <span>Platform: <span class="val">Vultr Cloud + VMware Workstation Pro</span></span>
-                <span>License: <span class="val">Splunk Free - 500MB/day</span></span>
+                <span>License: <span class="val">Splunk Enterprise Trial</span></span>
                 <span>Status: <span class="val">Complete</span></span>
             </div>
         </div>
@@ -539,7 +539,7 @@
         <div class="overview-box">
             <h2>// Overview</h2>
             <p>Deployed Splunk Enterprise on a dedicated Vultr cloud server and integrated it with my existing Wazuh SIEM. The goal was to build a multi-SIEM environment where Wazuh handles detection and alerting while Splunk serves as the central analytics and threat hunting platform.</p>
-            <p>Set up a Ubuntu victim machine to generate attack traffic, simulated a brute force attack with Hydra, created custom detection rules, and performed threat hunting against real-world SSH attacks hitting my infrastructure.</p>
+            <p>I set up an Ubuntu victim machine to generate attack traffic, simulated a brute force attack with Hydra, created custom detection rules, and performed threat hunting against real live SSH attacks hitting my infrastructure.</p>
         </div>
 
         <!-- Tool Tags -->
@@ -561,7 +561,7 @@
                 <h2>Installing Splunk</h2>
             </div>
 
-            <p>After deploying a fresh Ubuntu 22.04 server on Vultr, I downloaded and installed Splunk Enterprise. Splunk Free is not a separate product. It is Splunk Enterprise that defaults to a free license when you do not apply a paid one. This gives 500MB per day of indexing, which is more than enough for a lab environment.</p>
+            <p>After deploying a fresh Ubuntu 22.04 server on Vultr, I downloaded and installed Splunk Enterprise. Splunk Free is not a separate product. It is Splunk Enterprise that defaults to a free license when you do not apply a paid one. This gives 500MB per day of indexing, which is more than enough for my lab environment.</p>
 
             <div class="screenshot">
                 <img src="images/splunk/image1.png" alt="Splunk install terminal output">
@@ -629,7 +629,7 @@
 
             <h3 style="color: var(--purple-accent); font-size: 15px; margin: 24px 0 12px;">indexes.conf</h3>
 
-            <p>Finally I capped the amount of disk space Splunk's internal telemetry logs are allowed to use and set them to auto-delete after 7 days.</p>
+            <p>Finally I capped the amount of disk space Splunk's internal telemetry logs are allowed to use and set them to automatically delete after 7 days.</p>
 
             <div class="screenshot">
                 <img src="images/splunk/image9.png" alt="indexes.conf command">

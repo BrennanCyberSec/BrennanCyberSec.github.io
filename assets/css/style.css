@@ -1,4 +1,4 @@
-/* Brennan Vigna - Cybersecurity Portfolio
+﻿/* Brennan Vigna - Cybersecurity Portfolio
    Clean, professional dark theme with terminal aesthetic */
 
 /* ============================================
@@ -1315,5 +1315,38 @@ img {
     
     h2 {
         font-size: 24px;
+    }
+}
+
+/* Back To Top */
+.back-to-top {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 90;
+    background: var(--accent-blue-bg);
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s, background 0.2s;
+}
+
+.back-to-top:hover {
+    background: #388bfd;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        right: 14px;
+        bottom: 14px;
+        font-size: 12px;
+        padding: 8px 12px;
     }
 }

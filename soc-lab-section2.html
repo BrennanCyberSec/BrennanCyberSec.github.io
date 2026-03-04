@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +7,12 @@
     <meta name="description" content="Detection engineering with Atomic Red Team - automating an attack simulation, writing custom Wazuh rules, and validating MITRE ATT&CK coverage in a SOC lab environment.">
     <meta name="author" content="Brennan Vigna">
     <title>Section 2: Detection Engineering | Brennan Vigna</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
     <link rel="stylesheet" href="assets/css/style.css">
 
     <!-- Page-specific styles for lab content -->
     <style>
-        /* ── Section 2 Lab Content Styles ── */
+        /* â”€â”€ Section 2 Lab Content Styles â”€â”€ */
 
         .lab-content {
             max-width: 860px;
@@ -306,7 +306,7 @@
             border-bottom: none;
         }
         .takeaway-list li::before {
-            content: '▸';
+            content: 'â–¸';
             position: absolute;
             left: 0;
             color: #3fb950;
@@ -347,7 +347,7 @@
         }
     </style>
 </head>
-<body>
+<body id="top">
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header class="header">
@@ -386,7 +386,7 @@
                 <div class="lab-meta-info">
                     <span> February 2026</span>
                     <span> Detection Engineering</span>
-                    <span> Atomic Red Team · Wazuh · Sysmon · PowerShell</span>
+                    <span> Atomic Red Team Â· Wazuh Â· Sysmon Â· PowerShell</span>
                 </div>
             </div>
 
@@ -395,12 +395,12 @@
             <!-- ============================================ -->
             <div class="lab-step">
                 <h2><span class="step-num">1</span> Objective</h2>
-                <p>In Parts 1–4 of the SOC Automation Lab, I built the foundation for my SOC which involves Sysmon collecting endpoint telemetry on a Windows 10 VM, Wazuh then ingesting and analyzing the logs, TheHive managing cases, and Shuffle automating the workflow between them. The detection testing in Part 3 relied on manually running tools like Mimikatz to trigger specific alerts.</p>
-                <p>In this section I take a more systematic approach. Instead of manually executing one-off attacks, I'm using <strong class="hl-blue">Atomic Red Team</strong> — an open-source library of small, focused tests mapped directly to the MITRE ATT&CK framework. Each test simulates a specific adversary technique, which lets me validate whether my detection rules actually catch the activity they're supposed to catch.</p>
-                <p>The goal is to demonstrate a repeatable detection engineering workflow: <strong>execute a known technique → verify telemetry generation → confirm alert fires in Wazuh → document coverage gaps</strong>.</p>
+                <p>In Parts 1â€“4 of the SOC Automation Lab, I built the foundation for my SOC which involves Sysmon collecting endpoint telemetry on a Windows 10 VM, Wazuh then ingesting and analyzing the logs, TheHive managing cases, and Shuffle automating the workflow between them. The detection testing in Part 3 relied on manually running tools like Mimikatz to trigger specific alerts.</p>
+                <p>In this section I take a more systematic approach. Instead of manually executing one-off attacks, I'm using <strong class="hl-blue">Atomic Red Team</strong> â€” an open-source library of small, focused tests mapped directly to the MITRE ATT&CK framework. Each test simulates a specific adversary technique, which lets me validate whether my detection rules actually catch the activity they're supposed to catch.</p>
+                <p>The goal is to demonstrate a repeatable detection engineering workflow: <strong>execute a known technique â†’ verify telemetry generation â†’ confirm alert fires in Wazuh â†’ document coverage gaps</strong>.</p>
 
                 <div class="callout">
-                    <strong>Why Atomic Red Team over manual tools?</strong> Mimikatz tests one thing well (credential dumping), but I'm to detect a wide range of malicious behaviors. ART provides 100+ tests across discovery, persistence, defense evasion, lateral movement, and more — all mapped to ATT&CK technique IDs. This means I can systematically measure detection coverage across the entire kill chain.
+                    <strong>Why Atomic Red Team over manual tools?</strong> Mimikatz tests one thing well (credential dumping), but I'm to detect a wide range of malicious behaviors. ART provides 100+ tests across discovery, persistence, defense evasion, lateral movement, and more â€” all mapped to ATT&CK technique IDs. This means I can systematically measure detection coverage across the entire kill chain.
                 </div>
             </div>
 
@@ -409,29 +409,29 @@
             <!-- ============================================ -->
             <div class="lab-step">
                 <h2><span class="step-num">2</span> Detection Pipeline</h2>
-                <p>Before running any tests, it's important to understand how an alert goes from adversary action to analyst notification. Here's the pipeline that we already put in place from Parts 1–4:</p>
+                <p>Before running any tests, it's important to understand how an alert goes from adversary action to analyst notification. Here's the pipeline that we already put in place from Parts 1â€“4:</p>
 
                 <div class="pipeline">
                     <div class="pipeline-node">
                         <div class="node-label">Atomic Red Team</div>
                         <div class="node-sub">Execute technique</div>
                     </div>
-                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-arrow">â†’</span>
                     <div class="pipeline-node">
                         <div class="node-label">Sysmon</div>
                         <div class="node-sub">Capture telemetry</div>
                     </div>
-                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-arrow">â†’</span>
                     <div class="pipeline-node">
                         <div class="node-label">Wazuh Agent</div>
                         <div class="node-sub">Forward logs</div>
                     </div>
-                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-arrow">â†’</span>
                     <div class="pipeline-node">
                         <div class="node-label">Wazuh Manager</div>
-                        <div class="node-sub">Match rules → Alert</div>
+                        <div class="node-sub">Match rules â†’ Alert</div>
                     </div>
-                    <span class="pipeline-arrow">→</span>
+                    <span class="pipeline-arrow">â†’</span>
                     <div class="pipeline-node">
                         <div class="node-label">Shuffle</div>
                         <div class="node-sub">Automate response</div>
@@ -478,7 +478,7 @@
                             <span style="background:#febc2e"></span>
                             <span style="background:#28c840"></span>
                         </div>
-                        PowerShell — Atomic Red Team Installation + T1016 Execution
+                        PowerShell â€” Atomic Red Team Installation + T1016 Execution
                     </div>
                     <img src="images/section2/art-install-t1016_3.png" alt="PowerShell window showing Atomic Red Team installation completion and T1016 System Network Configuration Discovery test execution with ShowDetails flag">
                     <div class="screenshot-caption">ART installation confirmed, followed by T1016 execution with -ShowDetails showing all sub-tests for System Network Configuration Discovery including ipconfig, arp, nbtstat, net config, and TrickBot-style enumeration.</div>
@@ -486,18 +486,18 @@
             </div>
 
             <!-- ============================================ -->
-            <!-- STEP 4: Test Execution — T1016               -->
+            <!-- STEP 4: Test Execution â€” T1016               -->
             <!-- ============================================ -->
             <div class="lab-step">
-                <h2><span class="step-num">4</span> Test: T1016 — System Network Configuration Discovery</h2>
-                <p>The first technique I tested was <strong class="hl-amber">T1016</strong>, which falls under the <strong>Discovery</strong> tactic in the ATT&CK framework. Attackers use network configuration discovery early in an intrusion to understand the network layout — what subnets exist, what interfaces are available, what DNS servers are configured.</p>
+                <h2><span class="step-num">4</span> Test: T1016 â€” System Network Configuration Discovery</h2>
+                <p>The first technique I tested was <strong class="hl-amber">T1016</strong>, which falls under the <strong>Discovery</strong> tactic in the ATT&CK framework. Attackers use network configuration discovery early in an intrusion to understand the network layout â€” what subnets exist, what interfaces are available, what DNS servers are configured.</p>
 
                 <div class="code-block">
                     <div class="code-header">
                         <span class="dot dot-red"></span>
                         <span class="dot dot-yellow"></span>
                         <span class="dot dot-green"></span>
-                        PowerShell — Executing T1016
+                        PowerShell â€” Executing T1016
                     </div>
                     <div class="code-body">
 <span class="comment"># View test details before running</span>
@@ -537,10 +537,10 @@
                     </tbody>
                 </table>
 
-                <p>Each of these sub-tests mimics real-world adversary behavior. The TrickBot-style variant is especially interesting — it replicates the exact commands the TrickBot banking trojan uses for network reconnaissance, as documented in public threat research.</p>
+                <p>Each of these sub-tests mimics real-world adversary behavior. The TrickBot-style variant is especially interesting â€” it replicates the exact commands the TrickBot banking trojan uses for network reconnaissance, as documented in public threat research.</p>
 
                 <div class="callout tip">
-                    <strong>Detection note:</strong> These commands individually are legitimate admin tools. The detection value comes from Wazuh correlating that multiple network enumeration commands executed in rapid succession from a single process — a pattern that's normal for ART/adversary tools but unusual for regular user activity.
+                    <strong>Detection note:</strong> These commands individually are legitimate admin tools. The detection value comes from Wazuh correlating that multiple network enumeration commands executed in rapid succession from a single process â€” a pattern that's normal for ART/adversary tools but unusual for regular user activity.
                 </div>
             </div>
 
@@ -556,7 +556,7 @@
                         <span class="dot dot-red"></span>
                         <span class="dot dot-yellow"></span>
                         <span class="dot dot-green"></span>
-                        PowerShell — Creating Test Files
+                        PowerShell â€” Creating Test Files
                     </div>
                     <div class="code-body">
 <span class="comment"># Create the target directory</span>
@@ -580,7 +580,7 @@
                             <span style="background:#febc2e"></span>
                             <span style="background:#28c840"></span>
                         </div>
-                        PowerShell — Test File Creation
+                        PowerShell â€” Test File Creation
                     </div>
                     <img src="images/section2/dummy-test-files_3.png" alt="PowerShell showing creation of C:\TestFiles directory and 20 dummy document files for ransomware testing">
                     <div class="screenshot-caption">20 test documents created in C:\TestFiles, each containing simulated business data. These serve as targets for the ransomware simulation in the next step.</div>
@@ -590,10 +590,10 @@
             </div>
 
             <!-- ============================================ -->
-            <!-- STEP 6: T1490 — Inhibit System Recovery      -->
+            <!-- STEP 6: T1490 â€” Inhibit System Recovery      -->
             <!-- ============================================ -->
             <div class="lab-step">
-                <h2><span class="step-num">6</span> Test: T1490 — Inhibit System Recovery</h2>
+                <h2><span class="step-num">6</span> Test: T1490 â€” Inhibit System Recovery</h2>
                 <p>Technique <strong class="hl-amber">T1490</strong> falls under the <strong>Impact</strong> tactic. Before encrypting files, ransomware operators almost always delete Volume Shadow Copies to prevent victims from recovering their data through Windows' built-in backup mechanism. This is one of the most reliable indicators that a ransomware attack is in progress.</p>
 
                 <div class="code-block">
@@ -601,7 +601,7 @@
                         <span class="dot dot-red"></span>
                         <span class="dot dot-yellow"></span>
                         <span class="dot dot-green"></span>
-                        PowerShell — Executing T1490
+                        PowerShell â€” Executing T1490
                     </div>
                     <div class="code-body">
 <span class="comment"># Execute T1490 Test #1: Delete Volume Shadow Copies</span>
@@ -623,14 +623,14 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                             <span style="background:#febc2e"></span>
                             <span style="background:#28c840"></span>
                         </div>
-                        PowerShell — T1490 Execution
+                        PowerShell â€” T1490 Execution
                     </div>
                     <img src="images/section2/t1490-shadow-copies_3.png" alt="PowerShell showing T1490 Atomic Red Team test execution - deleting volume shadow copies using vssadmin">
                     <div class="screenshot-caption">T1490 test execution using vssadmin to delete volume shadow copies. The "No items found" message indicates no existing shadow copies were present, but the command execution itself is what triggers the detection.</div>
                 </div>
 
                 <div class="callout warning">
-                    <strong>Key insight:</strong> The test returned "No items found" because the VM had no existing shadow copies. However, the detection doesn't depend on whether the command succeeds — it depends on whether the command was <em>executed</em>. Sysmon captures the process creation event for <code class="inline">vssadmin.exe</code> regardless of the outcome, and the Wazuh rule triggers on the process name and arguments, not the exit code. This is an important detection engineering principle: detect the intent, not just the result.
+                    <strong>Key insight:</strong> The test returned "No items found" because the VM had no existing shadow copies. However, the detection doesn't depend on whether the command succeeds â€” it depends on whether the command was <em>executed</em>. Sysmon captures the process creation event for <code class="inline">vssadmin.exe</code> regardless of the outcome, and the Wazuh rule triggers on the process name and arguments, not the exit code. This is an important detection engineering principle: detect the intent, not just the result.
                 </div>
             </div>
 
@@ -639,7 +639,7 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
             <!-- ============================================ -->
             <div class="lab-step">
                 <h2><span class="step-num">7</span> Verifying Alerts in Wazuh</h2>
-                <p>After executing the Atomic Red Team tests, I switched to the Wazuh dashboard to verify that alerts were being generated. This is the critical validation step — if the tests run but no alerts appear, the detection pipeline has a gap that needs to be investigated.</p>
+                <p>After executing the Atomic Red Team tests, I switched to the Wazuh dashboard to verify that alerts were being generated. This is the critical validation step â€” if the tests run but no alerts appear, the detection pipeline has a gap that needs to be investigated.</p>
 
                 <p>For both T1016 and T1490, I confirmed that Wazuh was generating alerts. The Sysmon events from the Windows 10 agent were being forwarded to Wazuh Manager, matched against detection rules, and producing alerts visible in the Security Events dashboard.</p>
 
@@ -648,13 +648,13 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                 <ul class="takeaway-list">
                     <li>Execute the Atomic Red Team test on the Windows 10 VM</li>
                     <li>Open Event Viewer on the VM to confirm Sysmon captured the process creation events (Event ID 1)</li>
-                    <li>Check Wazuh dashboard → Security Events for alerts matching the technique</li>
+                    <li>Check Wazuh dashboard â†’ Security Events for alerts matching the technique</li>
                     <li>Verify the alert contains the correct MITRE ATT&CK technique ID mapping</li>
                     <li>Confirm the alert details include the expected process names and command-line arguments</li>
                 </ul>
 
                 <div class="callout tip">
-                    <strong>Troubleshooting tip:</strong> When alerts don't show up, work backwards through the pipeline. First check if Sysmon logged the event locally (Event Viewer → Applications and Services Logs → Microsoft → Windows → Sysmon). If Sysmon has it but Wazuh doesn't, the issue is in log forwarding (check ossec.conf on the agent). If Wazuh has the log but no alert fired, the issue is in the detection rule logic.
+                    <strong>Troubleshooting tip:</strong> When alerts don't show up, work backwards through the pipeline. First check if Sysmon logged the event locally (Event Viewer â†’ Applications and Services Logs â†’ Microsoft â†’ Windows â†’ Sysmon). If Sysmon has it but Wazuh doesn't, the issue is in log forwarding (check ossec.conf on the agent). If Wazuh has the log but no alert fired, the issue is in the detection rule logic.
                 </div>
             </div>
 
@@ -679,18 +679,18 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                             <td class="tid">T1016</td>
                             <td>System Network Configuration Discovery</td>
                             <td><span class="tactic-tag">Discovery</span></td>
-                            <td class="status-detected">✓ Detected</td>
+                            <td class="status-detected">âœ“ Detected</td>
                         </tr>
                         <tr>
                             <td class="tid">T1490</td>
                             <td>Inhibit System Recovery</td>
                             <td><span class="tactic-tag">Impact</span></td>
-                            <td class="status-detected">✓ Detected</td>
+                            <td class="status-detected">âœ“ Detected</td>
                         </tr>
                     </tbody>
                 </table>
 
-                <p>This is just the beginning! I'm having tons of fun so far learning and implementing this setup! In future iterations of this section, I'll expand testing across additional tactics such ascredential access, lateral movement, defense evasion, and persistence — to build comprehensive coverage across the kill chain. Each technique tested adds to the evidence that this SOC environment can detect real-world adversary behavior.</p>
+                <p>This is just the beginning! I'm having tons of fun so far learning and implementing this setup! In future iterations of this section, I'll expand testing across additional tactics such ascredential access, lateral movement, defense evasion, and persistence â€” to build comprehensive coverage across the kill chain. Each technique tested adds to the evidence that this SOC environment can detect real-world adversary behavior.</p>
             </div>
 
             <!-- ============================================ -->
@@ -702,9 +702,9 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                 <ul class="takeaway-list">
                     <li><strong>Atomic Red Team provides structure.</strong> Moving from manual Mimikatz execution to ART gave the testing process repeatable methodology. Every test is documented, mapped to ATT&CK, and can be re-run after rule changes to validate fixes.</li>
                     <li><strong>Detection depends on telemetry quality.</strong> Without Sysmon's detailed process creation logs (Event ID 1), most of these techniques would be invisible to Wazuh. The investment in Sysmon configuration from Part 1 pays off here.</li>
-                    <li><strong>Detect intent, not just results.</strong> The T1490 test "failed" (no shadow copies to delete), but the alert still fired because the detection rule targets the command execution, not its outcome. This mirrors real-world detection engineering — adversaries don't always succeed on the first try.</li>
+                    <li><strong>Detect intent, not just results.</strong> The T1490 test "failed" (no shadow copies to delete), but the alert still fired because the detection rule targets the command execution, not its outcome. This mirrors real-world detection engineering â€” adversaries don't always succeed on the first try.</li>
                     <li><strong>Systematic testing reveals gaps.</strong> Running tests across multiple ATT&CK tactics quickly shows where detection rules exist and where they don't. This gap analysis is the foundation of a detection engineering program.</li>
-                    <li><strong>The pipeline is the product.</strong> The value isn't in any single tool — it's in the end-to-end pipeline that takes raw endpoint activity and turns it into actionable alerts. Each component (Sysmon → Wazuh → Shuffle) has to work correctly for detection to function.</li>
+                    <li><strong>The pipeline is the product.</strong> The value isn't in any single tool â€” it's in the end-to-end pipeline that takes raw endpoint activity and turns it into actionable alerts. Each component (Sysmon â†’ Wazuh â†’ Shuffle) has to work correctly for detection to function.</li>
                 </ul>
             </div>
 
@@ -716,7 +716,7 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
                 <p>This section established the detection engineering methodology. The next phases of the portfolio will build on this foundation:</p>
 
                 <ul class="takeaway-list">
-                    <li><strong>Section 3 — Incident Response Playbooks:</strong> Documenting formal IR procedures using Shuffle automation — defining exactly what happens when each alert type fires.</li>
+                    <li><strong>Section 3 â€” Incident Response Playbooks:</strong> Documenting formal IR procedures using Shuffle automation â€” defining exactly what happens when each alert type fires.</li>
                     <li><strong>Expanded ART Testing:</strong> Running additional techniques across credential access (T1003), persistence (T1053, T1547), and defense evasion (T1562) to build broader detection coverage.</li>
                     <li><strong>Custom Wazuh Rules:</strong> Writing detection rules for techniques where Wazuh's default ruleset doesn't have coverage, documenting the rule logic and testing methodology.</li>
                     <li><strong>DFIR-IRIS Integration:</strong> Replacing TheHive with a self-hosted case management platform and integrating it into the existing Shuffle workflows.</li>
@@ -725,16 +725,18 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
 
             <!-- Navigation -->
             <div class="section-nav">
-                <a href="soc-lab-part4.html">← Part 4: Shuffle Automation</a>
-                <a href="labs.html">All Labs →</a>
+                <a href="soc-lab-part4.html">â† Part 4: Shuffle Automation</a>
+                <a href="labs.html">All Labs â†’</a>
             </div>
 
         </div>
     </main>
 
+    <a href="#top" class="back-to-top" aria-label="Back to top">Back to Top</a>
+
     <footer class="footer">
         <div class="footer-content">
-            <p>Brennan Vigna &copy; 2025 &middot; Cybersecurity Student &amp; IT Support</p>
+            <p>Brennan Vigna &copy; 2026 | Cybersecurity Student & IT Professional</p>
             <div class="footer-links">
                 <a href="https://github.com/BrennanCyberSec" aria-label="GitHub Profile">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -752,3 +754,4 @@ Done executing test: T1490-1 Windows - Delete Volume Shadow Copies</span>
     <script src="assets/js/nav.js"></script>
 </body>
 </html>
+

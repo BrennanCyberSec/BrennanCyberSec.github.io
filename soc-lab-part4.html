@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -867,7 +867,7 @@
         }
     </style>
 </head>
-<body>
+<body id="top">
     <!-- Navigation -->
     <nav class="nav">
         <a href="index.html" class="nav-logo">
@@ -941,27 +941,27 @@
                 <h4>Automation Pipeline</h4>
                 <div class="workflow-steps">
                     <div class="workflow-step">
-                        <div class="icon">🛡️</div>
+                        <div class="icon">ðŸ›¡ï¸</div>
                         <div class="label">Wazuh Alert</div>
                     </div>
-                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-arrow">â†’</div>
                     <div class="workflow-step">
-                        <div class="icon">🔀</div>
+                        <div class="icon">ðŸ”€</div>
                         <div class="label">Shuffle</div>
                     </div>
-                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-arrow">â†’</div>
                     <div class="workflow-step">
-                        <div class="icon">🔍</div>
+                        <div class="icon">ðŸ”</div>
                         <div class="label">VirusTotal</div>
                     </div>
-                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-arrow">â†’</div>
                     <div class="workflow-step">
-                        <div class="icon">🐝</div>
+                        <div class="icon">ðŸ</div>
                         <div class="label">TheHive</div>
                     </div>
-                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-arrow">â†’</div>
                     <div class="workflow-step">
-                        <div class="icon">📧</div>
+                        <div class="icon">ðŸ“§</div>
                         <div class="label">Email Alert</div>
                     </div>
                 </div>
@@ -980,7 +980,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">🔗</div>
+                    <div class="step-icon">ðŸ”—</div>
                     <div>
                         <h3 class="step-title">Create Webhook Trigger</h3>
                         <p class="step-subtitle">Configure Shuffle to receive Wazuh alerts</p>
@@ -1013,7 +1013,7 @@
                     <p class="screenshot-caption">// Shuffle workflow receiving Wazuh alert via webhook</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-icon">âœ“</div>
                         <div class="info-box-content">
                             Alert successfully received in Shuffle from Wazuh!
                         </div>
@@ -1034,7 +1034,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">🔍</div>
+                    <div class="step-icon">ðŸ”</div>
                     <div>
                         <h3 class="step-title">Regex Capture Group</h3>
                         <p class="step-subtitle">Extract SHA-256 hash from alert data</p>
@@ -1057,7 +1057,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">🦠</div>
+                    <div class="step-icon">ðŸ¦ </div>
                     <div>
                         <h3 class="step-title">VirusTotal Lookup</h3>
                         <p class="step-subtitle">Query threat intelligence for the hash</p>
@@ -1067,7 +1067,7 @@
                     <p>I sent the extracted hash to VirusTotal for enrichment. After correcting the input to ensure only the hash value was passed (not the full field), the lookup succeeded with a 200 response.</p>
 
                     <div class="info-box">
-                        <div class="info-box-icon">💡</div>
+                        <div class="info-box-icon">ðŸ’¡</div>
                         <div class="info-box-content">
                             <strong>Tip:</strong> Make sure to pass only the hash value to VirusTotal, not the entire field containing "SHA256=". Use the regex capture group output directly.
                         </div>
@@ -1088,7 +1088,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">🔑</div>
+                    <div class="step-icon">ðŸ”‘</div>
                     <div>
                         <h3 class="step-title">Configure TheHive Authentication</h3>
                         <p class="step-subtitle">Set up organization, service account, and API key</p>
@@ -1107,14 +1107,14 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">📋</div>
+                    <div class="step-icon">ðŸ“‹</div>
                     <div>
                         <h3 class="step-title">Map Alert Fields</h3>
                         <p class="step-subtitle">Configure the Create Alert action</p>
                     </div>
                 </div>
                 <div class="step-content">
-                    <p>I mapped fields from the Wazuh alert into a Create Alert action in Shuffle. This required fixing some JSON formatting and data type issues — for example, the severity field needed to be numeric, not a string.</p>
+                    <p>I mapped fields from the Wazuh alert into a Create Alert action in Shuffle. This required fixing some JSON formatting and data type issues â€” for example, the severity field needed to be numeric, not a string.</p>
 
                     <img src="images/part4/image2.png" alt="TheHive alert created" class="screenshot" onclick="openLightbox(this)">
                     <p class="screenshot-caption">// Alert created successfully in TheHive</p>
@@ -1123,7 +1123,7 @@
                     <p class="screenshot-caption">// Alert details in TheHive dashboard</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-icon">âœ“</div>
                         <div class="info-box-content">
                             Alert successfully created in TheHive with all mapped fields from Wazuh!
                         </div>
@@ -1144,7 +1144,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">📧</div>
+                    <div class="step-icon">ðŸ“§</div>
                     <div>
                         <h3 class="step-title">Configure Email Step</h3>
                         <p class="step-subtitle">Add email notification to the workflow</p>
@@ -1163,7 +1163,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">✅</div>
+                    <div class="step-icon">âœ…</div>
                     <div>
                         <h3 class="step-title">End-to-End Testing</h3>
                         <p class="step-subtitle">Verify the complete automation pipeline</p>
@@ -1176,9 +1176,9 @@
                     <p class="screenshot-caption">// Complete automation workflow running successfully</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">✓</div>
+                        <div class="info-box-icon">âœ“</div>
                         <div class="info-box-content">
-                            Full automation pipeline tested and working! Wazuh detection → Shuffle → VirusTotal enrichment → TheHive case → Email notification.
+                            Full automation pipeline tested and working! Wazuh detection â†’ Shuffle â†’ VirusTotal enrichment â†’ TheHive case â†’ Email notification.
                         </div>
                     </div>
                 </div>
@@ -1197,34 +1197,34 @@
 
             <div class="recap-grid fade-in">
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Created Shuffle workflow with webhook trigger connected to Wazuh</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Extracted SHA-256 hashes using regex capture groups</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Integrated VirusTotal for automated threat intelligence enrichment</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Connected TheHive for automated case creation</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Added email notifications to alert SOC analysts</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">✓</div>
+                    <div class="recap-check">âœ“</div>
                     <div class="recap-text">Tested and verified full end-to-end automation pipeline</div>
                 </div>
             </div>
 
             <div class="step-card fade-in" style="margin-top: 3rem;">
                 <div class="step-header">
-                    <div class="step-icon">🎉</div>
+                    <div class="step-icon">ðŸŽ‰</div>
                     <div>
                         <h3 class="step-title">SOC Automation Lab Complete</h3>
                         <p class="step-subtitle">From zero to full automation in four parts</p>
@@ -1242,9 +1242,9 @@
                     </ul>
 
                     <div class="info-box">
-                        <div class="info-box-icon">📚</div>
+                        <div class="info-box-icon">ðŸ“š</div>
                         <div class="info-box-content">
-                            This lab demonstrates practical skills in SIEM deployment, detection engineering, case management, and security automation — core competencies for SOC analyst roles.
+                            This lab demonstrates practical skills in SIEM deployment, detection engineering, case management, and security automation â€” core competencies for SOC analyst roles.
                         </div>
                     </div>
                 </div>
@@ -1255,7 +1255,7 @@
     <!-- Navigation Footer -->
     <div class="nav-footer">
         <a href="soc-lab-part3.html" class="nav-btn">
-            <span>←</span>
+            <span>â†</span>
             <div>
                 <div class="nav-btn-label">Previous</div>
                 <div class="nav-btn-title">Part 3: Telemetry</div>
@@ -1266,14 +1266,14 @@
                 <div class="nav-btn-label">Back to</div>
                 <div class="nav-btn-title">All Labs</div>
             </div>
-            <span>→</span>
+            <span>â†’</span>
         </a>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p class="footer-text">
-            Brennan Vigna © 2025 · <a href="index.html">Cybersecurity Student & IT Professional</a>
+            Brennan Vigna Â© 2025 Â· <a href="index.html">Cybersecurity Student & IT Professional</a>
         </p>
     </footer>
 
@@ -1412,5 +1412,7 @@
             }
         });
     </script>
+
+        <a href="#top" class="back-to-top" aria-label="Back to top">Back to Top</a>
 </body>
 </html>

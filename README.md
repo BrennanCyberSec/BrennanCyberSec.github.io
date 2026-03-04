@@ -20,19 +20,7 @@ Professional cybersecurity portfolio site for Brennan Vigna, focused on blue tea
 - `assets/gifs/` - GIF assets for labs/projects
 - `assets/resume/` - Resume PDF assets
 
-## Local Development
 
-This is a static site. No build step is required.
-
-1. Clone the repository.
-2. Open the folder in VS Code.
-3. Use Live Server (or open `index.html` directly) to preview changes.
-
-## Content Maintenance
-
-- Add new labs in `labs.html` using consistent `data-category` values.
-- Keep footer and navigation links synchronized across all pages.
-- Store all JavaScript under `assets/js/` and all media under `assets/images/` or `assets/gifs/`.
 
 ## License
 

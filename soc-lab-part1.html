@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -478,7 +478,11 @@
         }
 
         .tool-icon {
-            font-size: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--terminal-green);
             margin-bottom: 0.5rem;
         }
 
@@ -571,7 +575,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--terminal-green);
             flex-shrink: 0;
         }
 
@@ -737,7 +745,19 @@
         }
 
         .info-box-icon {
-            font-size: 1.25rem;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 0.35rem;
+            border-radius: 999px;
+            background: rgba(0, 255, 157, 0.12);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            color: var(--terminal-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
             flex-shrink: 0;
         }
 
@@ -797,14 +817,19 @@
         }
 
         .recap-check {
-            width: 24px;
-            height: 24px;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 0.35rem;
             background: rgba(0, 255, 157, 0.2);
-            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 999px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--terminal-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
             flex-shrink: 0;
         }
 
@@ -980,30 +1005,30 @@
                     <span class="terminal-prompt">~/soc-lab $</span> 
                     <span class="terminal-command">cat objectives.txt</span>
                 </div>
-                <div class="terminal-line terminal-output">â†’ Install Sysmon on Windows 10 VM</div>
-                <div class="terminal-line terminal-output">â†’ Deploy Wazuh SIEM in the cloud</div>
-                <div class="terminal-line terminal-output">â†’ Configure TheHive for case management</div>
-                <div class="terminal-line terminal-output">â†’ Set up Elasticsearch for indexing</div>
+                <div class="terminal-line terminal-output">&rarr; Install Sysmon on Windows 10 VM</div>
+                <div class="terminal-line terminal-output">&rarr; Deploy Wazuh SIEM in the cloud</div>
+                <div class="terminal-line terminal-output">&rarr; Configure TheHive for case management</div>
+                <div class="terminal-line terminal-output">&rarr; Set up Elasticsearch for indexing</div>
             </div>
 
             <div class="tools-grid">
                 <div class="tool-card">
-                    <div class="tool-icon">ðŸ–¥ï¸</div>
+                    <div class="tool-icon">VM</div>
                     <div class="tool-name">VMware</div>
                     <div class="tool-desc">Hypervisor</div>
                 </div>
                 <div class="tool-card">
-                    <div class="tool-icon">ðŸªŸ</div>
+                    <div class="tool-icon">WIN</div>
                     <div class="tool-name">Windows 10</div>
                     <div class="tool-desc">Target VM</div>
                 </div>
                 <div class="tool-card">
-                    <div class="tool-icon">ðŸ“Š</div>
+                    <div class="tool-icon">LOG</div>
                     <div class="tool-name">Sysmon</div>
                     <div class="tool-desc">Logging</div>
                 </div>
                 <div class="tool-card">
-                    <div class="tool-icon">ðŸ›¡ï¸</div>
+                    <div class="tool-icon">SIEM</div>
                     <div class="tool-name">Wazuh</div>
                     <div class="tool-desc">SIEM</div>
                 </div>
@@ -1022,7 +1047,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“</div>
+                    <div class="step-icon">DIR</div>
                     <div>
                         <h3 class="step-title">Navigate to Installation Directory</h3>
                         <p class="step-subtitle">Prepare the environment for Sysmon installation</p>
@@ -1038,7 +1063,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">âš¡</div>
+                    <div class="step-icon">RUN</div>
                     <div>
                         <h3 class="step-title">Execute Sysmon Installation</h3>
                         <p class="step-subtitle">Install with custom configuration file</p>
@@ -1058,7 +1083,7 @@
                     </div>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             After pressing enter and accepting the license agreement, Sysmon will be installed on your Windows 10 VM.
                         </div>
@@ -1068,7 +1093,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”</div>
+                    <div class="step-icon">LOG</div>
                     <div>
                         <h3 class="step-title">Verify Installation in Event Viewer</h3>
                         <p class="step-subtitle">Confirm Sysmon is logging events</p>
@@ -1082,12 +1107,12 @@
                             <span class="code-lang">Navigation Path</span>
                         </div>
                         <div class="code-content">
-                            <code><span class="string">Applications and Services</span> â†’ <span class="string">Microsoft</span> â†’ <span class="string">Windows</span> â†’ <span class="string">Sysmon</span> â†’ <span class="string">Operational</span></code>
+                            <code><span class="string">Applications and Services</span> &rarr; <span class="string">Microsoft</span> &rarr; <span class="string">Windows</span> &rarr; <span class="string">Sysmon</span> &rarr; <span class="string">Operational</span></code>
                         </div>
                     </div>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             If you see logs populating in the Operational folder, Sysmon is successfully capturing events!
                         </div>
@@ -1100,7 +1125,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“·</div>
+                    <div class="step-icon">SNAP</div>
                     <div>
                         <h3 class="step-title">Create VM Snapshot</h3>
                         <p class="step-subtitle">Save a restore point before proceeding</p>
@@ -1113,7 +1138,7 @@
                     <p class="screenshot-caption">// Creating a VM snapshot in VMware</p>
 
                     <div class="info-box warning">
-                        <div class="info-box-icon">âš ï¸</div>
+                        <div class="info-box-icon">!</div>
                         <div class="info-box-content">
                             Always create snapshots before major configuration changes. It's a critical safety practice in lab environments.
                         </div>
@@ -1134,7 +1159,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">â˜ï¸</div>
+                    <div class="step-icon">CLOUD</div>
                     <div>
                         <h3 class="step-title">Wazuh Server Configuration</h3>
                         <p class="step-subtitle">Ubuntu server for SIEM deployment</p>
@@ -1156,7 +1181,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ</div>
+                    <div class="step-icon">HIVE</div>
                     <div>
                         <h3 class="step-title">TheHive Server Configuration</h3>
                         <p class="step-subtitle">Ubuntu server for case management</p>
@@ -1172,7 +1197,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸŽ®</div>
+                    <div class="step-icon">VM</div>
                     <div>
                         <h3 class="step-title">VMs Running in the Cloud</h3>
                         <p class="step-subtitle">Both servers are up and ready</p>
@@ -1185,7 +1210,7 @@
                     <p class="screenshot-caption">// Marvel Rivals themed VMs running in Vultr dashboard</p>
 
                     <div class="info-box">
-                        <div class="info-box-icon">ðŸ’¡</div>
+                        <div class="info-box-icon">TIP</div>
                         <div class="info-box-content">
                             Pro tip: Name your VMs something memorable! It makes managing multiple instances much easier.
                         </div>
@@ -1206,7 +1231,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”Œ</div>
+                    <div class="step-icon">SSH</div>
                     <div>
                         <h3 class="step-title">SSH into Wazuh Server</h3>
                         <p class="step-subtitle">Connect to the cloud instance</p>
@@ -1222,7 +1247,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”„</div>
+                    <div class="step-icon">UPD</div>
                     <div>
                         <h3 class="step-title">Update System Packages</h3>
                         <p class="step-subtitle">Ensure all packages are current</p>
@@ -1248,7 +1273,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“¦</div>
+                    <div class="step-icon">PKG</div>
                     <div>
                         <h3 class="step-title">Install Wazuh</h3>
                         <p class="step-subtitle">Run the official installation script</p>
@@ -1274,7 +1299,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”§</div>
+                    <div class="step-icon">FIX</div>
                     <div>
                         <h3 class="step-title">Troubleshooting Connection Issues</h3>
                         <p class="step-subtitle">Resolving firewall and access problems</p>
@@ -1302,7 +1327,7 @@
                     <p class="screenshot-caption">// Adding firewall rule for Wazuh</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             After adding the firewall rule and refreshing the page, it worked! The Wazuh web interface is now accessible.
                         </div>
@@ -1329,7 +1354,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“‹</div>
+                    <div class="step-icon">PRE</div>
                     <div>
                         <h3 class="step-title">Install Prerequisites</h3>
                         <p class="step-subtitle">Required packages and dependencies</p>
@@ -1353,7 +1378,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">â˜•</div>
+                    <div class="step-icon">JAVA</div>
                     <div>
                         <h3 class="step-title">Install Java Virtual Machine</h3>
                         <p class="step-subtitle">Required for TheHive's application server</p>
@@ -1384,7 +1409,7 @@
                     </div>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             Java VM successfully installed!
                         </div>
@@ -1397,7 +1422,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ—„ï¸</div>
+                    <div class="step-icon">DB</div>
                     <div>
                         <h3 class="step-title">Install Apache Cassandra</h3>
                         <p class="step-subtitle">Database for incident response data</p>
@@ -1427,7 +1452,7 @@
                     </div>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             Cassandra is running successfully!
                         </div>
@@ -1440,7 +1465,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”Ž</div>
+                    <div class="step-icon">ES</div>
                     <div>
                         <h3 class="step-title">Install Elasticsearch</h3>
                         <p class="step-subtitle">Data indexing and search engine</p>
@@ -1475,7 +1500,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ</div>
+                    <div class="step-icon">HIVE</div>
                     <div>
                         <h3 class="step-title">Install TheHive</h3>
                         <p class="step-subtitle">The main case management platform</p>
@@ -1504,7 +1529,7 @@
                     </div>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon">OK</div>
                         <div class="info-box-content">
                             TheHive has been successfully installed!
                         </div>
@@ -1528,34 +1553,34 @@
 
             <div class="recap-grid fade-in">
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Created a Windows 10 VM with Sysmon logging configured</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Downloaded and installed Sysmon with custom config file</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Deployed two cloud VMs on Vultr for security infrastructure</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Installed and configured Wazuh SIEM platform</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Set up Apache Cassandra and Elasticsearch</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check">OK</div>
                     <div class="recap-text">Deployed TheHive case management platform</div>
                 </div>
             </div>
 
             <div class="step-card fade-in" style="margin-top: 3rem;">
                 <div class="step-header">
-                    <div class="step-icon">ðŸš€</div>
+                    <div class="step-icon">NEXT</div>
                     <div>
                         <h3 class="step-title">Up Next: Part 2</h3>
                         <p class="step-subtitle">Configuration and integration</p>
@@ -1565,7 +1590,7 @@
                     <p>In the next part of this series, we'll configure all the components we've installed to work together. This includes connecting Wazuh agents, configuring TheHive, and setting up the automation workflows.</p>
                     
                     <div class="info-box">
-                        <div class="info-box-icon">ðŸ“š</div>
+                        <div class="info-box-icon">NOTE</div>
                         <div class="info-box-content">
                             Stay tuned for Part 2 where we bring everything together and configure them to our needs!
                         </div>
@@ -1578,7 +1603,7 @@
     <!-- Navigation Footer -->
     <div class="nav-footer">
         <a href="labs.html" class="nav-btn">
-            <span>â†</span>
+            <span>&larr;</span>
             <div>
                 <div class="nav-btn-label">Previous</div>
                 <div class="nav-btn-title">All Labs</div>
@@ -1589,14 +1614,14 @@
                 <div class="nav-btn-label">Next</div>
                 <div class="nav-btn-title">Part 2: Configuration</div>
             </div>
-            <span>â†’</span>
+            <span>&rarr;</span>
         </a>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p class="footer-text">
-            Brennan Vigna Â© 2025 Â· <a href="index.html">Cybersecurity Student & IT Professional</a>
+            Brennan Vigna &copy; 2025 &middot; <a href="index.html">Cybersecurity Student & IT Professional</a>
         </p>
     </footer>
 
@@ -1732,6 +1757,5 @@
         });
     </script>
 
-        <a href="#top" class="back-to-top" aria-label="Back to top">Back to Top</a>
 </body>
 </html>

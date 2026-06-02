@@ -145,23 +145,6 @@ main {
     position: sticky;
     top: 0;
     z-index: 1000;
-   code,
-pre,
-.code-body,
-.code-content code,
-.code-lang,
-.code-copy,
-.terminal-body,
-.terminal-line,
-.terminal-title,
-.prompt,
-.cmd,
-.flag,
-.string,
-.output,
-.screenshot-caption,
-.lab-tools {
-    font-family: var(--font-code);
 }
 
 .header-content {

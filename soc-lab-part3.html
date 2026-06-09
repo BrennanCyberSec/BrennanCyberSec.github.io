@@ -897,7 +897,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Configure ossec.conf</h3>
                         <p class="step-subtitle">Set up agent communication with Wazuh manager</p>
@@ -913,7 +913,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”„</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Restart Wazuh Service</h3>
                         <p class="step-subtitle">Apply the configuration changes</p>
@@ -942,7 +942,7 @@
                     <p class="screenshot-caption">// Sysmon logs appearing in Wazuh Discover</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon"></div>
                         <div class="info-box-content">
                             Our configs worked! Sysmon telemetry is now flowing to Wazuh.
                         </div>
@@ -963,7 +963,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ›¡ï¸</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Disable Windows Defender</h3>
                         <p class="step-subtitle">Allow Mimikatz to run for testing</p>
@@ -973,7 +973,7 @@
                     <p>To generate Mimikatz telemetry in our lab environment, we need to temporarily disable Windows Defender on the Windows VM.</p>
                     
                     <div class="info-box warning">
-                        <div class="info-box-icon">âš ï¸</div>
+                        <div class="info-box-icon"></div>
                         <div class="info-box-content">
                             <strong>Lab Environment Only:</strong> Only disable security controls in isolated lab environments. Never do this on production systems.
                         </div>
@@ -988,7 +988,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”“</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Run Mimikatz</h3>
                         <p class="step-subtitle">Execute the credential dumping tool</p>
@@ -1015,7 +1015,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Enable Log All Settings</h3>
                         <p class="step-subtitle">Capture complete telemetry data</p>
@@ -1034,7 +1034,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”„</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Restart Wazuh Manager</h3>
                         <p class="step-subtitle">Apply configuration changes</p>
@@ -1060,7 +1060,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“‚</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Verify Log Storage</h3>
                         <p class="step-subtitle">Confirm logs are being archived</p>
@@ -1076,7 +1076,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">âš™ï¸</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Configure Filebeat</h3>
                         <p class="step-subtitle">Enable archive ingestion</p>
@@ -1100,7 +1100,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ”„</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Restart Filebeat</h3>
                         <p class="step-subtitle">Apply Filebeat changes</p>
@@ -1135,7 +1135,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“‹</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Add Custom Detection Rule</h3>
                         <p class="step-subtitle">Create rule to detect Mimikatz</p>
@@ -1151,7 +1151,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸŽ¯</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Test the Detection</h3>
                         <p class="step-subtitle">Run Mimikatz again to trigger the alert</p>
@@ -1166,7 +1166,7 @@
                     <p class="screenshot-caption">// Alert triggered! Mimikatz execution detected</p>
 
                     <div class="info-box success">
-                        <div class="info-box-icon">âœ“</div>
+                        <div class="info-box-icon"></div>
                         <div class="info-box-content">
                             Our custom detection rule successfully identified the Mimikatz execution!
                         </div>
@@ -1176,7 +1176,7 @@
 
             <div class="step-card fade-in">
                 <div class="step-header">
-                    <div class="step-icon">ðŸ“</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Alert Details</h3>
                         <p class="step-subtitle">View the detection description</p>
@@ -1203,34 +1203,34 @@
 
             <div class="recap-grid fade-in">
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Configured Sysmon telemetry to flow to Wazuh manager</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Disabled Windows Defender for lab testing</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Ran Mimikatz to simulate credential dumping attack</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Enabled full logging with logall and logall_json</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Configured Filebeat to ingest archive logs</div>
                 </div>
                 <div class="recap-item">
-                    <div class="recap-check">âœ“</div>
+                    <div class="recap-check"></div>
                     <div class="recap-text">Created custom Wazuh rule to detect Mimikatz execution</div>
                 </div>
             </div>
 
             <div class="step-card fade-in" style="margin-top: 3rem;">
                 <div class="step-header">
-                    <div class="step-icon">ðŸš€</div>
+                    <div class="step-icon"></div>
                     <div>
                         <h3 class="step-title">Up Next: Part 4</h3>
                         <p class="step-subtitle">Building the automation pipeline</p>
@@ -1240,7 +1240,7 @@
                     <p>In the final part of this series, we'll build an end-to-end automation pipeline using Shuffle. We'll enrich alerts with VirusTotal, create cases in TheHive, and set up email notifications for SOC analysts.</p>
                     
                     <div class="info-box">
-                        <div class="info-box-icon">ðŸ“š</div>
+                        <div class="info-box-icon"></div>
                         <div class="info-box-content">
                             Continue to Part 4 to complete the SOC automation workflow!
                         </div>
@@ -1253,7 +1253,7 @@
     <!-- Navigation Footer -->
     <div class="nav-footer">
         <a href="soc-lab-part2.html" class="nav-btn">
-            <span>â†</span>
+            <span></span>
             <div>
                 <div class="nav-btn-label">Previous</div>
                 <div class="nav-btn-title">Part 2: Configuration</div>
@@ -1264,14 +1264,14 @@
                 <div class="nav-btn-label">Next</div>
                 <div class="nav-btn-title">Part 4: Automation</div>
             </div>
-            <span>â†’</span>
+            <span></span>
         </a>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p class="footer-text">
-            Brennan Vigna Â© 2025 Â· <a href="index.html">Cybersecurity Student & IT Professional</a>
+            Brennan Vigna 2026 <a href="index.html">Cybersecurity Student & IT Professional</a>
         </p>
     </footer>
 
